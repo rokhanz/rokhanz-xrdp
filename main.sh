@@ -4,7 +4,18 @@
 # License: MIT
 
 # === Header ANSI Banner ===
-echo -e "\033[0;36m"
+CYAN='\033[0;36m'; NC='\033[0m'; YELLOW='\033[0;33m'; GREEN='\033[0;32m'
+
+echo -e "${CYAN}"
+echo "    $$$\   $$$$$$\  $$\   $$\ $$\   $$\  $$$$$$\  $$\   $$\ $$$$$$$$\ "
+echo " $$  __$$\ $$  __$$\ $$ | $$  |$$ |  $$ |$$  __$$\ $$$\  $$ |\____$$  |"
+echo " $$ |  $$ |$$ /  $$ |$$ |$$  / $$ |  $$ |$$ /  $$ |$$$$\ $$ |    $$  /"
+echo " $$$$$$$  |$$ |  $$ |$$$$$  /  $$$$$$$$ |$$$$$$$$ |$$ $$\$$ |   $$  /"
+echo " $$  __$$< $$ |  $$ |$$  $$<   $$  __$$ |$$  __$$ |$$ \$$$$ |  $$  /"
+echo " $$ |  $$ |$$ |  $$ |$$ |\$$\  $$ |  $$ |$$ |  $$ |$$ |\$$$ | $$  /"
+echo " $$ |  $$ | $$$$$$  |$$ | \$$\ $$ |  $$ |$$ |  $$ |$$ | \$$ |$$$$$$$$\ "
+echo " \__|  \__| \______/ \__|  \__|\__|  \__|\__|  \__|\__|  \__|\________|"
+
 echo    "========================================================"
 echo    "✨ XRDP + Desktop Environment Manager by rokhanz ✨"
 echo    "========================================================"
@@ -14,6 +25,8 @@ echo -e "\033[0m"
 find ./install ./uninstall ./set ./menu ./utils -type f -name "*.sh" -exec chmod +x {} +
 chmod +x ./install/install-batch.sh ./uninstall/uninstall-batch.sh
 . ./set/set-language.sh
+
+[ -f .marker_bot_uptime ] || date +%s > .marker_bot_uptime
 
 CYAN='\033[0;36m'; NC='\033[0m'; YELLOW='\033[0;33m'; GREEN='\033[0;32m'
 
