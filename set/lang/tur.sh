@@ -24,6 +24,19 @@ LANG_WARN_ALREADY_INSTALLED="⚠️ Zaten yapılandırıldı."
 LANG_BACK_TO_MAIN_MENU="↩️ Ana menüye dön"
 LANG_BACK_MAIN="↩️ 10 saniye içinde ana menüye dönülüyor... (hemen dönmek için Enter'a basın)"
 
+# Yeni kullanıcı ekle
+LANG_ADD_XRDP_USER_TITLE="=== 👤 XRDP Kullanıcısı Ekle ==="
+LANG_ADD_XRDP_USER_PROMPT="Yeni kullanıcı adını girin: "
+LANG_ADD_XRDP_USER_EXISTS="⚠️  Kullanıcı zaten var."
+LANG_ADD_XRDP_USER_SUCCESS="✅ Kullanıcı başarıyla oluşturuldu."
+LANG_ADD_XRDP_USER_FAIL="❌ Kullanıcı oluşturulamadı."
+LANG_ADD_XRDP_USER_PASS_PROMPT="Parolayı girin: "
+LANG_ADD_XRDP_USER_PASS_SET="✅ Parola ayarlandı."
+LANG_ADD_XRDP_USER_PASS_FAIL="❌ Parola ayarlanamadı."
+LANG_ADD_XRDP_USER_SUDO_PROMPT="Kullanıcı sudo grubuna eklensin mi? (y/n): "
+LANG_ADD_XRDP_USER_SUDO_OK="✅ Kullanıcı sudo grubuna eklendi."
+LANG_ADD_MENU_XRDP="➕ Yeni kullanıcı ekle"
+
 # Araç menüsü
 LANG_TOOLS_MENU_TITLE=" XRDP Uygulamaları/Araçlarını Yükle"
 LANG_TOOLS_INSTALL_ALL="Tüm Araçları Yükle"
