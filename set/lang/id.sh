@@ -1,5 +1,11 @@
 #!/bin/bash
-# id.sh — Bahasa Indonesia
+# language: Indonesia
+# Version: 1.0.0
+# License: MIT
+# Copyright (c) 2025 rokhanz
+
+LANG_NAME="Indonesia"
+LANG_EMOJI="🇮🇩"
 
 # Menu utama & global
 LANG_MENU_INSTALL=" Install XRDP + Desktop Environment"
