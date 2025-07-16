@@ -11,9 +11,12 @@ Otomatisasi setup XRDP, desktop Ubuntu, dan aplikasi favorit — multi-bahasa, m
 ## 🚀 Cara Install
 
 1. **Siapkan VPS**: Ubuntu 22.04 / 24.04 LTS, RAM 2GB+, 2vCPU+
-2. **Clone & Jalankan**
+2. install dependensi
+   ```bash
+   sudo apt update && sudo apt install -y git
+   ```
+3. **Clone & Jalankan**
     ```bash
-    sudo apt update && sudo apt install -y git
     git clone https://github.com/rokhanz/rokhanz-xrdp.git
     cd rokhanz-xrdp
     chmod +x main.sh
