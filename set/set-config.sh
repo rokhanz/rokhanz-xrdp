@@ -77,6 +77,5 @@ fi
 # --- Sukses
 log_ok "$LANG_STEP_DONE"
 
-echo -e "${YELLOW}↩️  ${LANG_BACK_TO_MAIN_MENU:-Kembali ke menu utama} (tekan Enter atau tunggu 10 detik)${NC}"
-read -t 10 -p ""
-exec bash ./menu/menu-set.sh
+echo -e "${YELLOW}↩️  ${LANG_BACK_TO_MAIN_MENU:-Kembali ke menu utama}${NC}"
+read -t 5 -p ""
