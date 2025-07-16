@@ -24,6 +24,19 @@ LANG_WARN_ALREADY_INSTALLED="⚠️ Đã cấu hình trước đó."
 LANG_BACK_TO_MAIN_MENU="↩️ Quay lại menu chính"
 LANG_BACK_MAIN="↩️ Quay lại menu chính sau 10 giây... (nhấn Enter để quay lại ngay)"
 
+# Thêm người dùng 
+LANG_ADD_XRDP_USER_TITLE="=== 👤 Thêm người dùng XRDP ==="
+LANG_ADD_XRDP_USER_PROMPT="Nhập tên người dùng mới: "
+LANG_ADD_XRDP_USER_EXISTS="⚠️  Người dùng đã tồn tại."
+LANG_ADD_XRDP_USER_SUCCESS="✅ Đã tạo người dùng thành công."
+LANG_ADD_XRDP_USER_FAIL="❌ Tạo người dùng thất bại."
+LANG_ADD_XRDP_USER_PASS_PROMPT="Nhập mật khẩu: "
+LANG_ADD_XRDP_USER_PASS_SET="✅ Đã đặt mật khẩu."
+LANG_ADD_XRDP_USER_PASS_FAIL="❌ Đặt mật khẩu thất bại."
+LANG_ADD_XRDP_USER_SUDO_PROMPT="Thêm người dùng vào nhóm sudo? (y/n): "
+LANG_ADD_XRDP_USER_SUDO_OK="✅ Đã thêm người dùng vào nhóm sudo."
+LANG_ADD_MENU_XRDP="➕ Thêm người dùng mới"
+
 # Menu công cụ
 LANG_TOOLS_MENU_TITLE=" Cài đặt ứng dụng/công cụ XRDP"
 LANG_TOOLS_INSTALL_ALL="Cài đặt tất cả công cụ"
