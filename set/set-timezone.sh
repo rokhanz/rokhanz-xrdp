@@ -54,5 +54,5 @@ while true; do
   fi
 done
 
-echo -e "${YELLOW}↩️  ${LANG_BACK_TO_MAIN_MENU} (3 detik)${NC}"
-sleep 3
+echo -e "${YELLOW}${LANG_BACK_TO_MAIN_MENU}${NC}"    
+read -r -t 3 -p ""
