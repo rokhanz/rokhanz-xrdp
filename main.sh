@@ -214,11 +214,7 @@ menu_set() {
     read -r -p "${LANG_MENU_PROMPT}" opt
     case "$opt" in
       1) bash ./set/set-desktop-language.sh ;;
-      2) bash ./set/set-language.sh
-    echo -e "${YELLOW}${LANG_BACK_TO_MAIN_MENU}${NC}"
-        read -r -p "${LANG_BACK_TO_MAIN_MENU}"
-        break
-        ;;
+      2) bash ./set/set-language.sh         ;;
       3) bash ./set/set-port.sh             ;;
       4) bash ./set/set-timezone.sh         ;;
       5) bash ./set/set-conky.sh            ;;
