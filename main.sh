@@ -5,6 +5,19 @@
 # Copyright (c) 2025 rokhanz
 
 # ──────────────────────────────────────────────
+# ► Language Selection (once at startup)
+# ──────────────────────────────────────────────
+echo "Pilih bahasa / Choose language:"
+echo "[1] Bahasa Indonesia"
+echo "[2] English"
+read -p "Pilihan/Choice (1/2): " lang_choice
+if [[ "$lang_choice" == "2" ]]; then
+  export LANG_SET="en"
+else
+  export LANG_SET="id"
+fi
+
+# ──────────────────────────────────────────────
 # ► Ensure execute permissions for all scripts
 # ──────────────────────────────────────────────
 chmod +x ./install-xrdp.sh   2>/dev/null || true
@@ -62,7 +75,7 @@ EOF
   echo -e "[1] ${LANG_MENU_INSTALL}"
   echo -e "[2] ${LANG_MENU_UNINSTALL}"
   echo -e "[3] ${LANG_MENU_TOOLS}"
-  echo -e "[4] Status Install/Uninstall"
+  echo -e "[4] ${LANG_MENU_STATUS:-Status Install/Uninstall}"
   echo -e "[5] ${LANG_MENU_INFO}"
   echo -e "[6] ${LANG_MENU_SET}"
   echo -e "[7] ${LANG_MENU_EXIT}"
@@ -98,4 +111,3 @@ EOF
       ;;
   esac
 done
-```0
