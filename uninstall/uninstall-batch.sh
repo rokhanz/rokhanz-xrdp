@@ -103,4 +103,4 @@ fi
 echo -e "${CYAN}${LANG_BACK_TO_MAIN_MENU} (tekan Enter atau tunggu 10 detik)${NC}"
 read -t 10 -p ""
 exec bash ./main.sh
-```0
+
