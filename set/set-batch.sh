@@ -43,4 +43,3 @@ run_step "${LANG_STEP_SET_CONKY:-Set VPS Info/Conky}" ./set/set-conky.sh
 touch "$BATCH_MARKER"
 echo -e "${GREEN}✅  ${LANG_BATCH_SET_SUCCESS:-Semua batch konfigurasi selesai!}${NC}"
 echo -e "${CYAN}↩️  ${LANG_BACK_TO_MAIN_MENU:-Kembali ke menu utama} (5 detik)${NC}"
-read -t 5 -p ""
