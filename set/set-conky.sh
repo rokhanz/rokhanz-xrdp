@@ -77,6 +77,5 @@ EOL
     ;;
 esac
 
-echo -e "${YELLOW}↩️  ${LANG_BACK_TO_MAIN_MENU} (tekan Enter atau tunggu 10 detik)${NC}"
-read -t 10 -p ""
-exec bash ./main.sh
+echo -e "${YELLOW}↩️  ${LANG_BACK_TO_MAIN_MENU}${NC}"
+read -t 5 -p ""
