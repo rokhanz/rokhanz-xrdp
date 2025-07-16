@@ -113,7 +113,7 @@ menu_tools() {
     echo "6. ${LANG_STEP_UN_VSCODE}"
     echo "7. ${LANG_TOOLS_INSTALL_ALL}"
     echo "8. ${LANG_TOOLS_UNINSTALL_ALL}"
-    echo "9" ${LANG_EXT_MENU_TITLE}"
+    echo "9. ${LANG_EXT_MENU_TITLE}"
     echo "0. ${LANG_BACK_TO_MAIN_MENU}"
     echo
     read -p "${LANG_MENU_PROMPT} " opt
