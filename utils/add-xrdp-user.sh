@@ -1,32 +1,58 @@
-#!/bin/bash
-# utils/add-xrdp-user.sh - Tambah user XRDP (multi-language + emoji)
+#!/usr/bin/env bash
+# utils/add-xrdp-user.sh — Tambah user XRDP (multi–bahasa + emoji)
 # Author: rokhanz
-# versi : 1.0.0
-# License : MIT
+# Version: 1.0.1
+# License: MIT
 
-. ./set/set-language.sh
+set -euo pipefail
+IFS=$'\n\t'
 
-CYAN='\033[0;36m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; RED='\033[0;31m'; NC='\033[0m'
+# ANSI colors
+CYAN='\033[0;36m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
+NC='\033[0m'
 
-echo -e "${CYAN}${LANG_ADD_XRDP_USER_TITLE:-=== 👤 Tambah User XRDP ===}${NC}"
-read -p "${LANG_ADD_XRDP_USER_PROMPT:-Masukkan username baru: }" xuser
+# Load bahasa dan fungsi umum
+source ./set/set-language.sh
+source ./lib/common.sh
+
+echo -e "${CYAN}${LANG_ADD_XRDP_USER_TITLE}${NC}"
+read -r -p "${LANG_ADD_XRDP_USER_PROMPT}" xuser
 
 if id "$xuser" &>/dev/null; then
-  echo -e "${YELLOW}${LANG_ADD_XRDP_USER_EXISTS:-⚠️  User $xuser sudah ada.}${NC}"
+  echo -e "${YELLOW}${LANG_ADD_XRDP_USER_EXISTS//\$xuser/$xuser}${NC}"
 else
-  sudo adduser --gecos "" "$xuser"
-  [ $? -eq 0 ] && echo -e "${GREEN}${LANG_ADD_XRDP_USER_SUCCESS:-✅ User $xuser berhasil dibuat.}${NC}" || { echo -e "${RED}${LANG_ADD_XRDP_USER_FAIL:-❌ Gagal membuat user.}${NC}"; exit 1; }
+  if sudo adduser --gecos "" "$xuser"; then
+    log_ok "${LANG_ADD_XRDP_USER_SUCCESS//\$xuser/$xuser}"
+  else
+    log_error "${LANG_ADD_XRDP_USER_FAIL}"
+    echo -e "${RED}${LANG_ADD_XRDP_USER_FAIL}${NC}"
+  fi
 fi
 
-read -s -p "${LANG_ADD_XRDP_USER_PASS_PROMPT:-Masukkan password: }" xpasswd
+# Set password
+read -s -r -p "${LANG_ADD_XRDP_USER_PASS_PROMPT}" xpasswd
 echo
-echo "$xuser:$xpasswd" | sudo chpasswd
-[ $? -eq 0 ] && echo -e "${GREEN}${LANG_ADD_XRDP_USER_PASS_SET:-✅ Password diset.}${NC}" || echo -e "${RED}${LANG_ADD_XRDP_USER_PASS_FAIL:-❌ Gagal set password.}${NC}"
-
-read -p "${LANG_ADD_XRDP_USER_SUDO_PROMPT:-Tambah user ke sudo group? (y/n): }" gs
-if [[ "$gs" =~ ^[Yy]$ ]]; then
-  sudo usermod -aG sudo "$xuser"
-  echo -e "${GREEN}${LANG_ADD_XRDP_USER_SUDO_OK:-✅ User $xuser ditambahkan ke group sudo.}${NC}"
+if echo "$xuser:$xpasswd" | sudo chpasswd; then
+  log_ok "${LANG_ADD_XRDP_USER_PASS_SET}"
+else
+  log_error "${LANG_ADD_XRDP_USER_PASS_FAIL}"
+  echo -e "${RED}${LANG_ADD_XRDP_USER_PASS_FAIL}${NC}"
 fi
 
-export XRDP_NEW_USER="$xuser"
+# Opsi sudo
+read -r -p "${LANG_ADD_XRDP_USER_SUDO_PROMPT}" gs
+if [[ "$gs" =~ ^[Yy] ]]; then
+  if sudo usermod -aG sudo "$xuser"; then
+    log_ok "${LANG_ADD_XRDP_USER_SUDO_OK//\$xuser/$xuser}"
+  else
+    log_error "${LANG_ADD_XRDP_USER_SUDO_FAIL}"
+    echo -e "${RED}${LANG_ADD_XRDP_USER_SUDO_FAIL}${NC}"
+  fi
+fi
+
+# Pause sebelum kembali ke menu
+echo -e "${YELLOW}${LANG_BACK_TO_MAIN_MENU}${NC}"
+read -r -p "${LANG_BACK_TO_MAIN_MENU}"
