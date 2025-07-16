@@ -24,6 +24,19 @@ LANG_WARN_ALREADY_INSTALLED="⚠️ Sudah diatur sebelumnya."
 LANG_BACK_TO_MAIN_MENU="↩️ Kembali ke menu utama"
 LANG_BACK_MAIN="↩️ Kembali ke menu utama dalam 10 detik... (tekan Enter untuk langsung kembali)"
 
+# Tambah user baru
+LANG_ADD_XRDP_USER_TITLE="=== 👤 Tambah User XRDP ==="
+LANG_ADD_XRDP_USER_PROMPT="Masukkan username baru: "
+LANG_ADD_XRDP_USER_EXISTS="⚠️  User sudah ada."
+LANG_ADD_XRDP_USER_SUCCESS="✅ User berhasil dibuat."
+LANG_ADD_XRDP_USER_FAIL="❌ Gagal membuat user."
+LANG_ADD_XRDP_USER_PASS_PROMPT="Masukkan password: "
+LANG_ADD_XRDP_USER_PASS_SET="✅ Password diset."
+LANG_ADD_XRDP_USER_PASS_FAIL="❌ Gagal set password."
+LANG_ADD_XRDP_USER_SUDO_PROMPT="Tambah user ke sudo group? (y/n): "
+LANG_ADD_XRDP_USER_SUDO_OK="✅ User ditambahkan ke group sudo."
+LANG_ADD_MENU_XRDP="➕ Tambah user baru"
+
 # Tools menu
 LANG_TOOLS_MENU_TITLE=" Install Aplikasi/Tools XRDP"
 LANG_TOOLS_INSTALL_ALL="Install Semua Tools"
