@@ -1,0 +1,39 @@
+# Backup, cache, dan log
+*.bak
+*.log
+*.swp
+*.swo
+logs/
+*.tmp
+
+# Marker dan hasil proses
+.installed_*
+.marker_*
+save-ext.txt
+.vscode/
+
+# File config user/script sementara
+*.env
+*.pid
+*.lock
+
+# File backup dan auto-save dari editor
+*~
+# Direktori sampah
+.DS_Store
+Thumbs.db
+
+# Output download
+*.deb
+*.iso
+
+# Python/Node stuff (jika someday extend)
+__pycache__/
+node_modules/
+
+# Hasil test atau CI
+/test-results/
+coverage/
+
+# Jangan ignore bash script utama!
+!*.sh
