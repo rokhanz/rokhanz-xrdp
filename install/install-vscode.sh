@@ -57,6 +57,6 @@ else
   log_error "Ada extension gagal install."
 fi
 
-echo -e "${LANG_BACK_MAIN}"
+echo -e "${LANG_BACK_TO_MAIN_MENU}"
 read -t 10 -p ""
-exec bash ./main.sh
+
