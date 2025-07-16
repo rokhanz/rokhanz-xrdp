@@ -24,6 +24,19 @@ LANG_WARN_ALREADY_INSTALLED="⚠️ 既に設定されています."
 LANG_BACK_TO_MAIN_MENU="↩️ メインメニューに戻る"
 LANG_BACK_MAIN="↩️ 10秒後にメインメニューに戻ります... (Enterキーで即時戻る)"
 
+# 新しいユーザーを追加
+LANG_ADD_XRDP_USER_TITLE="=== 👤 XRDP ユーザーを追加 ==="
+LANG_ADD_XRDP_USER_PROMPT="新しいユーザー名を入力してください: "
+LANG_ADD_XRDP_USER_EXISTS="⚠️  ユーザーは既に存在します。"
+LANG_ADD_XRDP_USER_SUCCESS="✅ ユーザーが正常に作成されました。"
+LANG_ADD_XRDP_USER_FAIL="❌ ユーザーの作成に失敗しました。"
+LANG_ADD_XRDP_USER_PASS_PROMPT="パスワードを入力してください: "
+LANG_ADD_XRDP_USER_PASS_SET="✅ パスワードが設定されました。"
+LANG_ADD_XRDP_USER_PASS_FAIL="❌ パスワードの設定に失敗しました。"
+LANG_ADD_XRDP_USER_SUDO_PROMPT="ユーザーをsudoグループに追加しますか？ (y/n): "
+LANG_ADD_XRDP_USER_SUDO_OK="✅ ユーザーがsudoグループに追加されました。"
+LANG_ADD_MENU_XRDP="➕ 新しいユーザーを追加"
+
 # ツールメニュー
 LANG_TOOLS_MENU_TITLE=" XRDP アプリ/ツールをインストール"
 LANG_TOOLS_INSTALL_ALL="すべてのツールをインストール"
