@@ -24,6 +24,19 @@ LANG_WARN_ALREADY_INSTALLED="⚠️ Bereits eingerichtet."
 LANG_BACK_TO_MAIN_MENU="↩️ Zurück zum Hauptmenü"
 LANG_BACK_MAIN="↩️ Zurück zum Hauptmenü in 10 Sekunden... (Drücke Enter für sofortige Rückkehr)"
 
+# Neuen Benutzer hinzufügen
+LANG_ADD_XRDP_USER_TITLE="=== 👤 XRDP-Benutzer hinzufügen ==="
+LANG_ADD_XRDP_USER_PROMPT="Neuen Benutzernamen eingeben: "
+LANG_ADD_XRDP_USER_EXISTS="⚠️  Benutzer existiert bereits."
+LANG_ADD_XRDP_USER_SUCCESS="✅ Benutzer erfolgreich erstellt."
+LANG_ADD_XRDP_USER_FAIL="❌ Benutzererstellung fehlgeschlagen."
+LANG_ADD_XRDP_USER_PASS_PROMPT="Passwort eingeben: "
+LANG_ADD_XRDP_USER_PASS_SET="✅ Passwort gesetzt."
+LANG_ADD_XRDP_USER_PASS_FAIL="❌ Passwort konnte nicht gesetzt werden."
+LANG_ADD_XRDP_USER_SUDO_PROMPT="Benutzer zur sudo-Gruppe hinzufügen? (y/n): "
+LANG_ADD_XRDP_USER_SUDO_OK="✅ Benutzer zur sudo-Gruppe hinzugefügt."
+LANG_ADD_MENU_XRDP="➕ Neuen Benutzer hinzufügen"
+
 # Tools Menü
 LANG_TOOLS_MENU_TITLE=" Installiere XRDP Anwendungen/Tools"
 LANG_TOOLS_INSTALL_ALL="Alle Tools installieren"
