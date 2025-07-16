@@ -4,40 +4,44 @@
 # Version: 1.0.0
 # License: MIT
 
-. ./set/set-language.sh
+set -e
 
+# Source language strings (fallback silently if missing)
+. ./set/set-language.sh 2>/dev/null || true
+
+# ANSI COLORS
 CYAN='\033[0;36m'; RED='\033[0;31m'; GREEN='\033[0;32m'; NC='\033[0m'
 
+# Prepare error logging
 LOG_ERROR="./logs/error.log"
 [ -d logs ] || mkdir logs
-
-error_log() { echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1" >> "$LOG_ERROR"; }
+error_log() {
+  echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1" >> "$LOG_ERROR"
+}
 
 clear
 echo -e "${CYAN}========================================================"
 echo -e " ${LANG_UNINSTALL_ALL_TITLE:-❌ Uninstall XRDP & Semua Komponen}"
 echo -e "========================================================${NC}"
+echo
 
-# Step 1: Cek & hentikan proses zombie / PID tools/desktop/xrdp
-echo -e "${CYAN}🛑 Stopping services & killing zombie processes...${NC}"
-for svc in xrdp xrdp-sesman conky code code-oss vlc chrome google-chrome; do
-  if pgrep "$svc" >/dev/null 2>&1; then
-    sudo killall -9 "$svc" 2>/dev/null && echo -e "${GREEN}Killed process: $svc${NC}" || true
-  fi
-  sudo systemctl stop "$svc" 2>/dev/null || true
-done
+# Step 1: Stop services & kill zombies
+echo -e "${CYAN} Stopping services & killing zombie processes...${NC}"
+bash utils/stop-services.sh || error_log "stop-services.sh failed"
+echo
 
-# Step 2: Modular Uninstall (semua uninstall-*.sh)
+# Step 2: Run every uninstall-*.sh under ./uninstall/
+echo -e "${CYAN} Running modular uninstall scripts...${NC}"
 for f in ./uninstall/uninstall-*.sh; do
-  if [ -f "$f" ]; then
-    bash "$f" || error_log "Failed $f"
-  fi
+  [ -f "$f" ] || continue
+  bash "$f" || error_log "Failed: $f"
 done
+echo
 
-# Step 3: Hapus marker/flag
+# Step 3: Remove marker flags
 rm -f .installed_* 2>/dev/null
 
 echo -e "${GREEN}${LANG_UNINSTALL_DONE:-Uninstall selesai!}${NC}"
-echo -e "${CYAN}↩️  ${LANG_BACK_TO_MAIN_MENU} (10 detik)${NC}"
+echo -e "${CYAN}↩️ ${LANG_BACK_TO_MAIN_MENU:-Kembali ke menu utama} (10 detik)${NC}"
 read -t 10 -p ""
 exec bash ./main.sh
