@@ -6,101 +6,69 @@
 
 set -e
 
-# --- Load language & colors ---
-. ./set/set-language.sh
-CYAN='\033[0;36m'
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-YELLOW='\033[0;33m'
-NC='\033[0m'
+# Source language strings
+. ../set/set-language.sh 2>/dev/null || true
 
-# --- Logging setup ---
+# ANSI COLORS
+CYAN='\033[0;36m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; RED='\033[0;31m'; NC='\033[0m'
+
+# Prepare error logging
 LOG_ERROR="./logs/error.log"
 [ -d logs ] || mkdir -p logs
-error_log() { echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1" >> "$LOG_ERROR"; }
+error_log() {
+  echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1" >> "$LOG_ERROR"
+}
 
-# --- Header ---
 clear
 echo -e "${CYAN}========================================================"
-echo -e "   ${LANG_BATCH_UNINSTALL_TITLE:-Uninstall Batch XRDP + Desktop + Tools}"
+echo -e " ${LANG_BATCH_UNINSTALL_TITLE:-Batch Uninstall XRDP + Desktop + Tools}"
 echo -e "========================================================${NC}"
-
-# --- 1) Stop services & kill zombies ---
-echo -e "${CYAN}🛑 Stopping services & killing zombie processes...${NC}"
-for svc in xrdp xrdp-sesman conky code vlc chrome; do
-  if pgrep -x "$svc" >/dev/null 2>&1; then
-    sudo killall -9 "$svc" 2>/dev/null && echo -e "${GREEN}Killed: $svc${NC}"
-  fi
-  sudo systemctl stop "$svc" &>/dev/null || true
-done
-
-# --- Map skrip ke pola nama paket untuk validasi ---
-declare -A PKG_MAP=(
-  [uninstall-xrdp.sh]="xrdp|xorgxrdp"
-  [uninstall-desktop.sh]="xfce4|gnome-session|plasma-desktop"
-  [uninstall-chrome.sh]="google-chrome-stable"
-  [uninstall-vlc.sh]="vlc"
-  [uninstall-vscode.sh]="code"
-  [uninstall-conky.sh]="conky"
-)
-
-# --- 2) Uninstall XRDP Core ---
-echo -e "${YELLOW}🔄 Uninstall XRDP Core...${NC}"
-bash ./uninstall-xrdp.sh || error_log "uninstall-xrdp.sh failed"
-
-# --- 3) Modular Uninstall dari folder uninstall/ ---
-echo -e "${YELLOW}🔄 Modular Uninstall...${NC}"
-error_count=0
-for script in ./uninstall/uninstall-*.sh; do
-  name=$(basename "$script")
-  [[ "$name" == "uninstall-batch.sh" ]] && continue
-
-  # validasi apakah komponen masih terpasang
-  regex=${PKG_MAP[$name]}
-  if [[ -n "$regex" && -z $(dpkg -l | grep -E "$regex") ]]; then
-    echo -e "${GREEN}$name: komponen tidak ditemukan, skip${NC}"
-    continue
-  fi
-
-  echo -e "${YELLOW}→ Running $name...${NC}"
-  if bash "$script"; then
-    echo -e "${GREEN}✔ $name${NC}"
-  else
-    echo -e "${RED}✖ $name${NC}"
-    error_log "Failed $script"
-    ((error_count++))
-  fi
-done
-
-# --- 4) Remove all VSCode extensions ---
-echo -e "${YELLOW}🗑️  Removing all VSCode extensions...${NC}"
-if command -v code >/dev/null 2>&1; then
-  for ext in $(code --list-extensions); do
-    if code --uninstall-extension "$ext"; then
-      echo -e "${GREEN}✔ $ext${NC}"
-    else
-      echo -e "${RED}✖ $ext${NC}"
-      error_log "Failed ext: $ext"
-    fi
-  done
-else
-  echo -e "${YELLOW}⚠️  VSCode CLI not found, skipping extension cleanup${NC}"
-fi
-
-# --- 5) Cleanup markers ---
-rm -f ./.installed_batch ./.installed_* 2>/dev/null
-
-# --- 6) Summary ---
 echo
-if [ "$error_count" -eq 0 ]; then
-  echo -e "${GREEN}${LANG_BATCH_UNINSTALL_SUCCESS:-Semua uninstall batch sukses!}${NC}"
+
+# 1) Stop & kill all relevant services
+echo -e "${CYAN} Stopping services & killing zombie processes...${NC}"
+bash ../utils/stop-services.sh || error_log "stop-services.sh failed"
+echo
+
+# 2) Core XRDP uninstall
+echo -e "${YELLOW}→ Uninstall XRDP Core...${NC}"
+bash ../uninstall-xrdp.sh || error_log "uninstall-xrdp.sh failed"
+echo
+
+# 3) Remove Desktop Environment (XFCE4)
+echo -e "${YELLOW}→ Removing XFCE4 and related packages...${NC}"
+sudo apt purge -y xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils \
+  || error_log "XFCE4 purge failed"
+echo
+
+# 4) Remove additional tools
+echo -e "${YELLOW}→ Removing additional tools...${NC}"
+sudo apt purge -y conky-all xscreensaver flameshot ristretto gnome-software \
+  || error_log "Tools purge failed"
+echo
+
+# 5) Autoremove & autoclean
+echo -e "${YELLOW}→ Autoremove & cleanup...${NC}"
+sudo apt autoremove -y \
+  && sudo apt autoclean -y \
+  || error_log "Autoremove/autoclean failed"
+echo
+
+# 6) Remove markers
+echo -e "${YELLOW}→ Cleaning up markers...${NC}"
+rm -f ./.installed_batch ../.marker_bot_uptime 2>/dev/null
+echo
+
+# 7) Summary
+if [ ! -s "$LOG_ERROR" ]; then
+  echo -e "${GREEN}${LANG_BATCH_UNINSTALL_SUCCESS:-Semua komponen batch berhasil di-uninstall!}${NC}"
 else
-  echo -e "${RED}${LANG_BATCH_UNINSTALL_FAIL:-Ada error pada uninstall batch!} ($error_count errors)${NC}"
-  echo -e "${YELLOW}❗ Check $LOG_ERROR${NC}"
+  echo -e "${RED}${LANG_BATCH_UNINSTALL_FAIL:-Beberapa error terjadi saat uninstall batch.}${NC}"
+  echo -e "${YELLOW}Periksa $LOG_ERROR untuk detail.${NC}"
 fi
+echo
 
-# --- Back to main ---
-echo -e "${CYAN}${LANG_BACK_TO_MAIN_MENU} (tekan Enter atau tunggu 10 detik)${NC}"
+# 8) Back to main menu
+echo -e "${CYAN}${LANG_BACK_TO_MAIN_MENU:-Tekan Enter atau tunggu 10 detik untuk kembali ke menu utama}${NC}"
 read -t 10 -p ""
-exec bash ./main.sh
-
+exec bash ../main.sh
