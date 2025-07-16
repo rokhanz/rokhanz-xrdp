@@ -4,13 +4,19 @@
 # Version: 1.0.2
 # License: MIT
 
-set -e
+set -euo pipefail
+IFS=$'\n\t'
 
-# Source language strings
-. ../set/set-language.sh 2>/dev/null || true
+# ANSI colors
+CYAN='\033[0;36m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
+NC='\033[0m'
 
-# ANSI COLORS
-CYAN='\033[0;36m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; RED='\033[0;31m'; NC='\033[0m'
+# Load bahasa dan funngsi umum
+source ./set/set-language.sh
+source ./lib/common.sh
 
 # Prepare error logging
 LOG_ERROR="./logs/error.log"
