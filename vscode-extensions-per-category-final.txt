@@ -1,0 +1,63 @@
+#CATEGORY:WEB DEVELOPMENT
+ms-python.python (publisher: Microsoft)
+dbaeumer.vscode-eslint (publisher: Microsoft)
+xabikos.javascriptsnippets (publisher: Xabikos)
+esbenp.prettier-vscode (publisher: Esbenp)
+humao.rest-client (publisher: Humao)
+christian-kohler.path-intellisense (publisher: Christian-Kohler)
+formulahendry.auto-close-tag (publisher: Formula Hendry)
+formulahendry.auto-rename-tag (publisher: Formula Hendry)
+
+#CATEGORY:DATABASE / MYSQL
+cweijan.vscode-mysql (publisher: Cweijan)
+ms-mssql.mssql (publisher: Microsoft)
+formulahendry.vscode-mysql (publisher: Formula Hendry)
+bnjjjj.job-mysql-syntax (publisher: bnjjjj)
+
+#CATEGORY:AI & Co-Pilot
+genieai.chatgpt-vscode (publisher: Genie-AI)
+blackboxapp.blackbox (publisher: Blackbox)
+tabnine.tabnine-vscode (publisher: TabNine)
+ms-toolsai.jupyter (publisher: Microsoft)
+
+#CATEGORY:Markdown & Docs
+shd101wyy.markdown-preview-enhanced (publisher: shd101wyy)
+yzhang.markdown-all-in-one (publisher: Yzhang)
+markdownlint.vscode-markdownlint (publisher: MarkdownLint)
+bierner.markdown-mermaid (publisher: Bierner)
+hediet.vscode-drawio (publisher: Hediet)
+
+#CATEGORY:Git & Utility
+eamodio.gitlens (publisher: Eamodio)
+mhutchie.git-graph (publisher: MHutchie)
+streetsidesoftware.code-spell-checker (publisher: Street Side Software)
+streetsidesoftware.code-spell-checker-indonesian (publisher: Street Side Software)
+ban.spellright (publisher: Ban)
+zainchen.json (publisher: Zain Chen)
+
+#CATEGORY:Docker & Container
+ms-azuretools.vscode-docker (publisher: Microsoft)
+ms-vscode-remote.remote-containers (publisher: Microsoft)
+
+#CATEGORY:Language Programmer
+ms-python.python (publisher: Microsoft)
+ms-vscode.cpptools (publisher: Microsoft)
+golang.go (publisher: Go Team)
+rust-lang.rust (publisher: Rust-lang)
+redhat.java (publisher: Red Hat)
+Dart-Code.flutter (publisher: Dart-Code)
+ms-dotnettools.csharp (publisher: Microsoft)
+
+#CATEGORY:Theme & UI
+zhuangtongfa.Material-theme (publisher: Zhuangtongfa)
+pkief.material-icon-theme (publisher: PKief)
+dracula-theme.theme-dracula (publisher: Dracula)
+GitHub.github-vscode-theme (publisher: GitHub)
+
+#CATEGORY:Language Dictionary
+streetsidesoftware.code-spell-checker (publisher: Street Side Software)
+streetsidesoftware.code-spell-checker-indonesian (publisher: Street Side Software)
+streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries (publisher: Street Side Software)
+ban.spellright (publisher: Ban)
+ltex-plus.vscode-ltex-plus (publisher: LTeX-Plus)
+futuretoons.Natural-Language-Translator (publisher: FutureToons)
