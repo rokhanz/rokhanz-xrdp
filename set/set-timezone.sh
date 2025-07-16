@@ -53,6 +53,3 @@ while true; do
     break
   fi
 done
-
-echo -e "${YELLOW}${LANG_BACK_TO_MAIN_MENU}${NC}"    
-read -r -t 3 -p ""
