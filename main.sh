@@ -57,9 +57,10 @@ EOF
   echo -e "[1] ${LANG_MENU_INSTALL}"
   echo -e "[2] ${LANG_MENU_UNINSTALL}"
   echo -e "[3] ${LANG_MENU_TOOLS}"
-  echo -e "[4] ${LANG_MENU_INFO}"
-  echo -e "[5] ${LANG_MENU_SET}"
-  echo -e "[6] ${LANG_MENU_EXIT}"
+  echo -e "[4] Status Install/Uninstall"
+  echo -e "[5] ${LANG_MENU_INFO}"
+  echo -e "[6] ${LANG_MENU_SET}"
+  echo -e "[7] ${LANG_MENU_EXIT}"
   echo    "-----------------------------------------"
   read -p "${LANG_MENU_PROMPT} " choice
 
@@ -74,12 +75,15 @@ EOF
       bash ./menu/menu-tools.sh
       ;;
     4)
-      bash ./utils/info-vps.sh
+      bash ./utils/status.sh
       ;;
     5)
+      bash ./utils/info-vps.sh
+      ;;
+    6)
       bash ./menu/menu-set.sh
       ;;
-    6|q|Q)
+    7|q|Q)
       echo -e "${CYAN}${LANG_GOODBYE}${NC}"
       exit 0
       ;;
