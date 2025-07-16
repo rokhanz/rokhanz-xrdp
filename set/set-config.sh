@@ -76,6 +76,3 @@ fi
 
 # --- Sukses
 log_ok "$LANG_STEP_DONE"
-
-echo -e "${YELLOW}↩️  ${LANG_BACK_TO_MAIN_MENU:-Kembali ke menu utama}${NC}"
-read -t 5 -p ""
