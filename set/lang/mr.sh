@@ -24,6 +24,18 @@ LANG_WARN_ALREADY_INSTALLED="⚠️ ယခင်တုန်းက ပြင်�
 LANG_BACK_TO_MAIN_MENU="↩️ အဓိကမီနူးသို့ ပြန်သွားမည်"
 LANG_BACK_MAIN="↩️ 10 စက္ကန့်အတွင်း အဓိကမီနူးသို့ ပြန်သွားမည်... (Enter နှိပ်ပါ)"
 
+# အသုံးပြုသူ အသစ် ထည့်မည်
+LANG_ADD_XRDP_USER_TITLE="=== 👤 XRDP အသုံးပြုသူ ထည့်မယ် ==="
+LANG_ADD_XRDP_USER_PROMPT="အသုံးပြုသူနာမည် အသစ် ထည့်ပါ: "
+LANG_ADD_XRDP_USER_EXISTS="⚠️  အသုံးပြုသူရှိပြီးသား။"
+LANG_ADD_XRDP_USER_SUCCESS="✅ အသုံးပြုသူ ဖန်တီးမှု အောင်မြင်ပါသည်။"
+LANG_ADD_XRDP_USER_FAIL="❌ အသုံးပြုသူ ဖန်တီးမှု မအောင်မြင်ခဲ့ပါ။"
+LANG_ADD_XRDP_USER_PASS_PROMPT="စကားဝှက် ထည့်ပါ: "
+LANG_ADD_XRDP_USER_PASS_SET="✅ စကားဝှက် သတ်မှတ်ပြီးပါပြီ။"
+LANG_ADD_XRDP_USER_PASS_FAIL="❌ စကားဝှက် သတ်မှတ်ရာတွင် မအောင်မြင်ခဲ့ပါ။"
+LANG_ADD_XRDP_USER_SUDO_PROMPT="အသုံးပြုသူကို sudo အုပ်စုထဲ ထည့်မလား? (y/n): "
+LANG_ADD_XRDP_USER_SUDO_OK="✅ အသုံးပြုသူကို sudo အုပ်စုထဲ ထည့်ပြီးပါပြီ။"
+LANG_ADD_MENU_XRDP="➕ အသုံးပြုသူ အသစ် ထည့်မယ်"
 # ကိရိယာ မီနူး
 LANG_TOOLS_MENU_TITLE=" XRDP အက်ပ်/ကိရိယာများ တပ်ဆင်မယ်"
 LANG_TOOLS_INSTALL_ALL="အက်ပ်/ကိရိယာအားလုံး တပ်ဆင်မယ်"
