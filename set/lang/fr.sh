@@ -1,5 +1,11 @@
 #!/bin/bash
-# id.sh — Langue française
+# language: French
+# Version: 1.0.0
+# License: MIT
+# Copyright (c) 2025 rokhanz
+
+LANG_NAME="France"
+LANG_EMOJI="🇫🇷"
 
 # Menu principal & global
 LANG_MENU_INSTALL=" Installer XRDP + environnement de bureau"
