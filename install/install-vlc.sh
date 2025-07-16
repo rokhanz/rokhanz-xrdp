@@ -39,4 +39,3 @@ fi
 
 echo -e "${CYAN}↩️  ${LANG_BACK_TO_TOOLS:-Kembali ke menu tools} (5 detik)${NC}"
 read -t 5 -p ""
-exec bash ./menu/menu-tools.sh
