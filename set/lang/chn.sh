@@ -24,6 +24,19 @@ LANG_WARN_ALREADY_INSTALLED="⚠️ 已经设置过。"
 LANG_BACK_TO_MAIN_MENU="↩️ 返回主菜单"
 LANG_BACK_MAIN="↩️ 10 秒后返回主菜单... (按 Enter 立即返回)"
 
+# 添加新用户
+LANG_ADD_XRDP_USER_TITLE="=== 👤 添加 XRDP 用户 ==="
+LANG_ADD_XRDP_USER_PROMPT="输入新的用户名："
+LANG_ADD_XRDP_USER_EXISTS="⚠️  用户已存在。"
+LANG_ADD_XRDP_USER_SUCCESS="✅ 用户创建成功。"
+LANG_ADD_XRDP_USER_FAIL="❌ 用户创建失败。"
+LANG_ADD_XRDP_USER_PASS_PROMPT="输入密码："
+LANG_ADD_XRDP_USER_PASS_SET="✅ 密码已设置。"
+LANG_ADD_XRDP_USER_PASS_FAIL="❌ 密码设置失败。"
+LANG_ADD_XRDP_USER_SUDO_PROMPT="将用户添加到sudo组？(y/n)："
+LANG_ADD_XRDP_USER_SUDO_OK="✅ 用户已添加到sudo组。"
+LANG_ADD_MENU_XRDP="➕ 添加新用户"
+
 # 工具菜单
 LANG_TOOLS_MENU_TITLE=" 安装 XRDP 应用/工具"
 LANG_TOOLS_INSTALL_ALL="安装所有工具"
