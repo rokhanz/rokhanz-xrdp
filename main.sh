@@ -113,7 +113,8 @@ menu_tools() {
     echo "6. ${LANG_STEP_UN_VSCODE}"
     echo "7. ${LANG_TOOLS_INSTALL_ALL}"
     echo "8. ${LANG_TOOLS_UNINSTALL_ALL}"
-    echo "9. ${LANG_BACK_TO_MAIN_MENU}"
+    echo "9" ${LANG_EXT_MENU_TITLE}"
+    echo "0. ${LANG_BACK_TO_MAIN_MENU}"
     echo
     read -p "${LANG_MENU_PROMPT} " opt
     case "$opt" in
@@ -125,7 +126,8 @@ menu_tools() {
       6) bash "./uninstall/uninstall-vscode.sh" ;;
       7) bash "./install/install-chrome.sh"; bash "./install/install-vlc.sh"; bash "./install/install-vscode.sh"          ;;
       8) bash "./uninstall/uninstall-chrome.sh"; bash "./uninstall/uninstall-vlc.sh"; bash "./uninstall/uninstall-vscode.sh" ;;
-      9) return ;;
+      9) menu_extension        ;;
+      0) return ;;
       *) echo -e "${YELLOW}${LANG_INVALID_OPTION}${NC}"; sleep 1 ;;
     esac
     echo; read -p "${LANG_BACK_TO_MAIN_MENU}"
@@ -247,20 +249,18 @@ while true; do
   echo
   echo "1. 🚀 ${LANG_MENU_INSTALL}"
   echo "2. 🔧 ${LANG_MENU_TOOLS}"
-  echo "3. 🧩 ${LANG_EXT_MENU_TITLE}"
-  echo "4. ℹ️  ${LANG_MENU_INFO}"
-  echo "5. 📊 ${LANG_MENU_STATUS}"
-  echo "6. ⚙️  ${LANG_MENU_SET}"
+  echo "3. ℹ️  ${LANG_MENU_INFO}"
+  echo "4. 📊 ${LANG_MENU_STATUS}"
+  echo "5. ⚙️  ${LANG_MENU_SET}"
   echo "0. 🚪 ${LANG_MENU_EXIT}"
   echo
   read -p "${LANG_MENU_PROMPT} " choice
   case "$choice" in
     1) menu_batch     ;;
     2) menu_tools     ;;
-    3) menu_extension ;;
-    4) bash ./utils/info-vps.sh    ;;
-    5) bash ./utils/status.sh      ;;
-    6) menu_set       ;;
+    3) bash ./utils/info-vps.sh    ;;
+    4) bash ./utils/status.sh      ;;
+    5) menu_set       ;;
     0) echo -e "${GREEN}${LANG_MENU_EXIT}${NC}"; exit 0 ;;
     *) echo -e "${YELLOW}${LANG_INVALID_OPTION}${NC}"; sleep 1 ;;
   esac
