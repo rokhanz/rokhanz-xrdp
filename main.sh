@@ -245,18 +245,22 @@ menu_set() {
 while true; do
   clear; show_banner
   echo
-  echo "1. ${LANG_MENU_INSTALL}"
-  echo "2. ${LANG_MENU_TOOLS}"
-  echo "3. ${LANG_EXT_MENU_TITLE}"
-  echo "4. ${LANG_MENU_SET}"
-  echo "0. ${LANG_MENU_EXIT}"
+  echo "1. 🚀 ${LANG_MENU_INSTALL}"
+  echo "2. 🔧 ${LANG_MENU_TOOLS}"
+  echo "3. 🧩 ${LANG_EXT_MENU_TITLE}"
+  echo "4. ℹ️  ${LANG_MENU_INFO}"
+  echo "5. 📊 ${LANG_MENU_STATUS}"
+  echo "6. ⚙️  ${LANG_MENU_SET}"
+  echo "0. 🚪 ${LANG_MENU_EXIT}"
   echo
   read -p "${LANG_MENU_PROMPT} " choice
   case "$choice" in
     1) menu_batch     ;;
     2) menu_tools     ;;
     3) menu_extension ;;
-    4) menu_set       ;;
+    4) bash ./utils/info-vps.sh    ;;
+    5) bash ./utils/status.sh      ;;
+    6) menu_set       ;;
     0) echo -e "${GREEN}${LANG_MENU_EXIT}${NC}"; exit 0 ;;
     *) echo -e "${YELLOW}${LANG_INVALID_OPTION}${NC}"; sleep 1 ;;
   esac
