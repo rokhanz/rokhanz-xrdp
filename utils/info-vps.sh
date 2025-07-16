@@ -26,6 +26,5 @@ echo -e "XRDP Port      : $(grep -m1 '^port=' /etc/xrdp/xrdp.ini 2>/dev/null | c
 echo -e "Desktop Env    : $(cat /etc/xrdp/startwm.sh 2>/dev/null | grep '^exec' | awk '{print $2}' || echo '-')"
 
 echo -e "${GREEN}${LANG_TIPS_STATUS:-Tips: Gunakan menu SET untuk pengaturan lanjutan.}${NC}"
-echo -e "${YELLOW}↩️  ${LANG_BACK_TO_MAIN_MENU} (tekan Enter atau tunggu 10 detik)${NC}"
-read -t 10 -p ""
-exec bash ./main.sh
+echo -e "${YELLOW}↩️  ${LANG_BACK_TO_MAIN_MENU}${NC}"
+read -r -p ""
