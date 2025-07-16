@@ -71,4 +71,3 @@ echo
 # 8) Back to main menu
 echo -e "${CYAN}${LANG_BACK_TO_MAIN_MENU:-Tekan Enter atau tunggu 10 detik untuk kembali ke menu utama}${NC}"
 read -t 10 -p ""
-exec bash ../main.sh
