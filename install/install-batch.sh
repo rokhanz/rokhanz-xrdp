@@ -93,4 +93,3 @@ fi
 
 echo -e "${CYAN}${LANG_BACK_TO_MAIN_MENU:-Kembali ke menu utama} (5 detik)${NC}"
 read -t 5 -p ""
-exec bash ./main.sh
