@@ -4,7 +4,18 @@
 # License: MIT
 # Copyright (c) 2025 rokhanz
 
-# ===== Ensure we're in the script's directory =====
+# ──────────────────────────────────────────────
+# ► Ensure execute permissions for all scripts
+# ──────────────────────────────────────────────
+chmod +x ./install-xrdp.sh   2>/dev/null || true
+chmod +x ./uninstall-xrdp.sh 2>/dev/null || true
+for dir in install uninstall set menu utils; do
+  if [ -d "./$dir" ]; then
+    find "./$dir" -type f -name '*.sh' -exec chmod +x {} \; 2>/dev/null
+  fi
+done
+
+# ===== Ensure script directory =====
 cd "$(dirname "$0")"
 
 # ===== ANSI COLORS =====
@@ -15,12 +26,6 @@ NC='\033[0m'
 
 # ---- Marker Bot Uptime ----
 [ -f .marker_bot_uptime ] || date +%s > .marker_bot_uptime
-
-# ---- Make all scripts executable (skip missing dirs) ----
-for d in install uninstall set menu utils; do
-  [ -d "./$d" ] && find "./$d" -type f -name "*.sh" -exec chmod +x {} +
-done
-chmod +x ./install/install-batch.sh ./uninstall/uninstall-batch.sh 2>/dev/null || true
 
 # ---- Load multi-language & emoji, with fallback ----
 if ! . ./set/set-language.sh; then
@@ -61,7 +66,7 @@ EOF
   echo -e "[5] ${LANG_MENU_INFO}"
   echo -e "[6] ${LANG_MENU_SET}"
   echo -e "[7] ${LANG_MENU_EXIT}"
-  echo    "-----------------------------------------"
+  echo "-----------------------------------------"
   read -p "${LANG_MENU_PROMPT} " choice
 
   case "$choice" in
@@ -93,3 +98,4 @@ EOF
       ;;
   esac
 done
+```0
