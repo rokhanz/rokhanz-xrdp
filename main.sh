@@ -96,7 +96,7 @@ menu_batch() {
         sleep 1
         ;;
     esac
-    echo; read -p "${LANG_BACK_TO_MAIN_MENU}"
+    echo; read -p "${LANG_BACK_TO_MAIN_MENU}" _
   done
 }
 
@@ -128,11 +128,11 @@ menu_tools() {
       6) bash "./uninstall/uninstall-vscode.sh" ;;
       7) bash "./install/install-chrome.sh"; bash "./install/install-vlc.sh"; bash "./install/install-vscode.sh"          ;;
       8) bash "./uninstall/uninstall-chrome.sh"; bash "./uninstall/uninstall-vlc.sh"; bash "./uninstall/uninstall-vscode.sh" ;;
-      9) menu_extension        ;;
+      9) menu_extension ;;
       0) return ;;
       *) echo -e "${YELLOW}${LANG_INVALID_OPTION}${NC}"; sleep 1 ;;
     esac
-    echo; read -p "${LANG_BACK_TO_MAIN_MENU}"
+    echo; read -p "${LANG_BACK_TO_MAIN_MENU}" _
   done
 }
 
@@ -240,7 +240,7 @@ menu_set() {
       9) return                            ;;
       *) echo -e "${YELLOW}${LANG_INVALID_OPTION}${NC}"; sleep 1 ;;
     esac
-    echo; read -p "${LANG_BACK_TO_MAIN_MENU}"
+    echo; read -p "${LANG_BACK_TO_MAIN_MENU}" _
   done
 }
 
