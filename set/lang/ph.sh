@@ -24,6 +24,19 @@ LANG_WARN_ALREADY_INSTALLED="⚠️ Naka-set na dati."
 LANG_BACK_TO_MAIN_MENU="↩️ Bumalik sa pangunahing menu"
 LANG_BACK_MAIN="↩️ Babalik sa pangunahing menu sa loob ng 10 segundo... (pindutin ang Enter para agad bumalik)"
 
+# Magdagdag ng bagong user
+LANG_ADD_XRDP_USER_TITLE="=== 👤 Magdagdag ng XRDP User ==="
+LANG_ADD_XRDP_USER_PROMPT="Ilagay ang bagong username: "
+LANG_ADD_XRDP_USER_EXISTS="⚠️  Username ay umiiral na."
+LANG_ADD_XRDP_USER_SUCCESS="✅ Matagumpay na nalikha ang user."
+LANG_ADD_XRDP_USER_FAIL="❌ Nabigong lumikha ng user."
+LANG_ADD_XRDP_USER_PASS_PROMPT="Ilagay ang password: "
+LANG_ADD_XRDP_USER_PASS_SET="✅ Na-set ang password."
+LANG_ADD_XRDP_USER_PASS_FAIL="❌ Nabigong i-set ang password."
+LANG_ADD_XRDP_USER_SUDO_PROMPT="Idagdag ang user sa sudo group? (y/n): "
+LANG_ADD_XRDP_USER_SUDO_OK="✅ Naidagdag ang user sa sudo group."
+LANG_ADD_MENU_XRDP="➕ Magdagdag ng bagong user"
+
 # Menu ng Kagamitan
 LANG_TOOLS_MENU_TITLE=" I-install ang aplikasyon/kagamitan ng XRDP"
 LANG_TOOLS_INSTALL_ALL="I-install ang Lahat ng Kagamitan"
