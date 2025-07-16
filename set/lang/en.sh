@@ -1,5 +1,11 @@
 #!/bin/bash
-# id.sh — Indonesian Language
+# language: English
+# Version: 1.0.0
+# License: MIT
+# Copyright (c) 2025 rokhanz
+
+LANG_NAME="English"
+LANG_EMOJI="🇬🇧"
 
 # Main menu & global
 LANG_MENU_INSTALL=" Install XRDP + Desktop Environment"
@@ -18,7 +24,7 @@ LANG_BACK_TO_MAIN_MENU="↩️ Return to main menu"
 LANG_BACK_MAIN="↩️ Returning to main menu in 10 seconds... (press Enter to return immediately)"
 
 # Tools menu
-LANG_TOOLS_MENU_TITLE=" Install XRDP Applications/Tools"
+LANG_TOOLS_MENU_TITLE=" Install XRDP applications/tools"
 LANG_TOOLS_INSTALL_ALL="Install All Tools"
 LANG_TOOLS_MENU_PROMPT="Select tools menu (1/2/3/4):"
 
@@ -90,7 +96,7 @@ LANG_EXT_ERR_NOT_FOUND="Extension file not found!"
 # Uninstall VSCode
 LANG_UNINSTALL_VSCODE_EXTENSIONS="️ Removing VSCode extensions..."
 LANG_UNINSTALL_VSCODE_APP="️ Removing VSCode application..."
-LANG_UNINSTALL_VSCODE_ALL="️ Removing VSCode application & all extensions..."
+LANG_UNINSTALL_VSCODE_ALL="️ Removing application & all VSCode extensions..."
 
 # General errors
 LANG_ERROR_MARKER="❌ Failed to create marker!"
