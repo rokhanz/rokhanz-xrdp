@@ -11,6 +11,7 @@ LANG_EMOJI="🇸🇦"
 LANG_MENU_INSTALL=" تثبيت XRDP + بيئة سطح المكتب"
 LANG_MENU_UNINSTALL="❌ إلغاء تثبيت XRDP وبيئة سطح المكتب"
 LANG_MENU_TOOLS="️ تثبيت تطبيقات/أدوات XRDP"
+LANG_EXT_MENU_TITLE="🧩معالج إضافات VSCode"
 LANG_MENU_INFO="ℹ️ المعلومات والحالة"
 LANG_MENU_SET=" الإعدادات/SET"
 LANG_MENU_EXIT=" خروج"
