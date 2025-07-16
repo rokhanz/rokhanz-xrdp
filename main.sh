@@ -14,7 +14,7 @@ CYAN='\033[0;36m'; GREEN='\033[0;32m'
 YELLOW='\033[0;33m'; RED='\033[0;31m'; NC='\033[0m'
 
 # ────────────────────────────────────────────────────────────
-# 1) ser bahasa
+# 1) Pilih bahasa sekali saja
 source ./set/set-language.sh
 
 # ────────────────────────────────────────────────────────────
@@ -133,11 +133,83 @@ menu_tools() {
 }
 
 # ────────────────────────────────────────────────────────────
-# Submenu: Extensions (VSCode wizard)
+# Submenu: Extensions (VSCode wizard) – merged inline
 menu_extension() {
+  # load language already done above
+  EXTFILE="vscode-ext.txt"
+  SAVEFILE="save-ext.txt"
+  MARKER_FILE=".installed_vscode_ext"
+  LOGFILE="$LOG_DIR/error.log"
+  mkdir -p "$(dirname "$LOGFILE")"
+
+  declare -A EXT_CAT EXT_MAP
+  CAT_LIST=()
+  # parse categories
+  while IFS= read -r line; do
+    if [[ "$line" =~ ^#CATEGORY:(.*) ]]; then
+      current_cat="${BASH_REMATCH[1]}"
+      CAT_LIST+=("$current_cat")
+      continue
+    fi
+    if [[ "$line" =~ ^([a-zA-Z0-9.-]+)\ \(\s*publisher:\ ([^)]+)\) ]]; then
+      ext="${BASH_REMATCH[1]}"
+      pub="${BASH_REMATCH[2]}"
+      EXT_CAT["$current_cat"]+="$ext|$pub,"
+      EXT_MAP["$ext"]="$pub"
+    fi
+  done < "$EXTFILE"
+
+  PICKED=()
+  log_error() { echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1" >> "$LOGFILE"; }
+
+  while :; do
+    clear; show_banner
+    echo; echo -e "${CYAN}${LANG_EXT_MENU_TITLE}${NC}"
+    # category menu
+    for i in "${!CAT_LIST[@]}"; do
+      printf "%2d. %s\n" $((i+1)) "${CAT_LIST[$i]}"
+    done
+    echo "99. ${LANG_EXT_SAVE}"
+    echo "0. ${LANG_EXT_BACK}"
+    echo
+    read -p "${LANG_MENU_PROMPT} " choice
+    [[ "$choice" == "0" ]] && return
+    [[ "$choice" == "99" ]] && break
+    cat="${CAT_LIST[$((choice-1))]}"
+    [[ -z "$cat" ]] && { echo "${LANG_INVALID_OPTION}"; sleep 1; continue; }
+    # extensions in category
+    IFS=',' read -ra items <<< "${EXT_CAT[$cat]}"
+    echo "--------------------------------------------------------"
+    for j in "${!items[@]}"; do
+      [[ -z "${items[$j]}" ]] && continue
+      IFS='|' read -r nm pb <<< "${items[$j]}"
+      printf "%2d. %-30s (publisher: %s)\n" $((j+1)) "$nm" "$pb"
+    done
+    echo "0. ${LANG_EXT_BACK}"
+    read -p "${LANG_EXT_CHOOSE_EXT_PROMPT} " picks
+    for p in $picks; do
+      [[ "$p" == "0" ]] && break
+      ext="${items[$((p-1))]%%,*}"
+      ext="${ext%%|*}"
+      [[ -n "$ext" && ! " ${PICKED[*]} " =~ " $ext " ]] && PICKED+=("$ext")
+    done
+  done
+
+  # confirm and save
   clear; show_banner
-  bash ./menu/menu-extension.sh
-  echo; read -p "${LANG_BACK_TO_MAIN_MENU}"
+  echo; echo -e "${CYAN}${LANG_EXT_CHOSEN}${NC}"
+  for ext in "${PICKED[@]}"; do
+    echo "- $ext (${EXT_MAP[$ext]})"
+  done
+  read -p "${LANG_EXT_SAVE}? (y/n): " ans
+  if [[ "$ans" =~ ^[Yy]$ ]]; then
+    printf "%s\n" "${PICKED[@]}" > "$SAVEFILE" && touch "$MARKER_FILE" && echo "✅ ${LANG_EXT_DONE}"
+  else
+    echo "${LANG_EXT_ERR_EMPTY}"; return
+  fi
+
+  echo; echo -e "${LANG_BACK_MAIN}"
+  read -t 10 -p ""
 }
 
 # ────────────────────────────────────────────────────────────
@@ -189,4 +261,3 @@ while true; do
     *) echo -e "${YELLOW}${LANG_INVALID_OPTION}${NC}"; sleep 1 ;;
   esac
 done
-```0
