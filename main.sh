@@ -4,6 +4,8 @@
 # License: MIT
 # Copyright (c) 2025 rokhanz
 
+set -euo pipefail
+IFS=$'\n\t'
 # ────────────────────────────────────────────────────────────
 # Pastikan dijalankan 
 cd "$(dirname "$0")"
