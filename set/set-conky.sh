@@ -76,6 +76,3 @@ EOL
   *)
     ;;
 esac
-
-echo -e "${YELLOW}↩️  ${LANG_BACK_TO_MAIN_MENU}${NC}"
-read -t 5 -p ""
