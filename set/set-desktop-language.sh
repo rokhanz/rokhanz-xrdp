@@ -37,6 +37,3 @@ else
   log_ok "$LANG_SET_SUCCESS (default: $DESKTOP_LANG)"
   echo "Catatan: Silakan logout dan login ulang agar bahasa berubah."
 fi
-
-echo -e "${YELLOW}↩️  ${LANG_BACK_TO_MAIN_MENU} (tekan Enter atau tunggu 10 detik)${NC}"
-read -t -t 5 -p ""
