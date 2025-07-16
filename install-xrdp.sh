@@ -4,9 +4,9 @@
 # Version: 1.0.0
 # License: MIT
 
-. ./set/set-language.sh
+# Muat terjemahan & warna
+./set/set-language.sh
 [ -z "$LANG_INSTALL_START" ] && choose_language
-
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
@@ -15,9 +15,16 @@ NC='\033[0m'
 
 error_count=0
 
-log_error() { echo -e "${RED}${LANG_FAIL_EMOJI:-❌}  $1${NC}"; ((error_count++)); }
-log_warn()  { echo -e "${YELLOW}${LANG_WARN_EMOJI:-⚠️}  $1${NC}"; }
-log_ok()    { echo -e "${GREEN}${LANG_SUCCESS_EMOJI:-✅}  $1${NC}"; }
+log_error() {
+  echo -e "${RED}${LANG_FAIL_EMOJI:-❌} $1${NC}"
+  ((error_count++))
+}
+log_warn() {
+  echo -e "${YELLOW}${LANG_WARN_EMOJI:-⚠️} $1${NC}"
+}
+log_ok() {
+  echo -e "${GREEN}${LANG_SUCCESS_EMOJI:-✅} $1${NC}"
+}
 
 run_step() {
   local desc="$1"
@@ -25,7 +32,8 @@ run_step() {
   local check_installed="$3"
 
   echo -e "${CYAN}$desc${NC}"
-  # --- Skip jika sudah terinstall
+
+  # --- Skip jika sudah terinstall (hanya jika param ketiga diberikan)
   if [ -n "$check_installed" ]; then
     if eval "$check_installed" >/dev/null 2>&1; then
       log_warn "$LANG_INSTALL_SKIP"
@@ -47,6 +55,7 @@ run_step() {
   else
     log_warn "$LANG_SCRIPT_NOT_FOUND: $script"
   fi
+
   sleep 1
 }
 
@@ -54,13 +63,18 @@ clear
 echo -e "${CYAN}$LANG_INSTALL_TITLE${NC}"
 echo -e "${CYAN}$LANG_INSTALL_START${NC}"
 
-run_step "$LANG_INSTALL_STEP_DEPS"    ./install/install-deps.sh
-run_step "$LANG_INSTALL_STEP_DESKTOP" ./install/install-desktop.sh   "dpkg -l | grep -E -q 'xfce4|plasma-desktop|ubuntu-desktop|gnome-session'"
-run_step "$LANG_INSTALL_STEP_XRDP"    ./install/install-xrdp-core.sh "dpkg -l | grep -qw xrdp"
+# Jalankan langkah instalasi
+echo
+run_step "$LANG_INSTALL_STEP_DEPS" ./install/install-deps.sh
+run_step "$LANG_INSTALL_STEP_DESKTOP" ./install/install-desktop.sh "dpkg -l | grep -E -q 'xfce4|plasma-desktop|ubuntu-desktop|gnome-session'"
+# Berikut ini sudah tanpa validasi pengecekan, sehingga wajib jalan
+run_step "$LANG_INSTALL_STEP_XRDP" ./install/install-xrdp-core.sh
 run_step "$LANG_INSTALL_STEP_TIMEZONE" ./set/set-timezone.sh
-run_step "$LANG_INSTALL_STEP_PORT"     ./set/set-port.sh
-run_step "$LANG_INSTALL_STEP_CONFIG"   ./set/set-config.sh
+run_step "$LANG_INSTALL_STEP_PORT" ./set/set-port.sh
+run_step "$LANG_INSTALL_STEP_CONFIG" ./set/set-config.sh
 
+echo
+# Ringkasan hasil
 if [ "$error_count" -eq 0 ]; then
   log_ok "$LANG_INSTALL_SUCCESS"
   echo -e "${CYAN}$LANG_INSTALL_NEXT_STEP${NC}"
