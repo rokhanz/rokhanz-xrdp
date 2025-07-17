@@ -231,7 +231,7 @@ menu_set() {
       3) bash ./set/set-port.sh             ;;
       4) bash ./set/set-timezone.sh         ;;
       5) bash ./set/set-conky.sh            ;;
-      6) bash ./utils/add-user-xrdp.sh      ;;
+      6) bash ./utils/add-xrdp-user.sh      ;;
       9) break                              ;;
       *) echo -e "${YELLOW}${LANG_INVALID_OPTION}${NC}" && sleep 1 ;;
     esac
