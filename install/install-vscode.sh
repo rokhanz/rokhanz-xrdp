@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # install/install-vscode.sh — Install VSCode & Extensions (multi-bahasa, logging, marker)
 # Author : rokhanz
-# Version: 1.0.1
+# Version: 1.0.0
 # License: MIT
 
 set -euo pipefail
