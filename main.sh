@@ -142,18 +142,21 @@ menu_extension() {
   declare -A EXT_CAT EXT_MAP
   local CAT_LIST=()
   local current_cat=""
+  
   while IFS= read -r line; do
     if [[ "$line" =~ ^#CATEGORY:(.*) ]]; then
-      current_cat="${BASH_REMATCH[1]}"
-      CAT_LIST+=("$current_cat")
+      CAT_LIST+=("${BASH_REMATCH[1]}")
     elif [[ "$line" =~ ^([a-zA-Z0-9._-]+)[[:space:]]+\(publisher:[[:space:]]*([^)]+)\)$ ]]; then
       ext="${BASH_REMATCH[1]}"
       pub="${BASH_REMATCH[2]}"
-      EXT_CAT["$current_cat"]+="$ext|$pub,"
-      EXT_MAP["$ext"]="$pub"
+      last_cat_idx=$(( ${#CAT_LIST[@]} - 1 ))
+      if [[ $last_cat_idx -ge 0 ]]; then
+        EXT_CAT["${CAT_LIST[$last_cat_idx]}"]+="$ext|$pub,"
+        EXT_MAP["$ext"]="$pub"
+      fi
     fi
   done < "$EXTFILE"
-
+  
   local PICKED=()
   log_error(){ echo "$(date '+%F %T') [ERROR] $1" >> "$LOGFILE"; }
 
