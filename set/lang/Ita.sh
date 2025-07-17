@@ -24,6 +24,25 @@ LANG_WARN_ALREADY_INSTALLED="⚠️ Già configurato."
 LANG_BACK_TO_MAIN_MENU="↩️ Torna al menu principale"
 LANG_BACK_MAIN="↩️ Torna al menu principale tra 10 secondi... (premi Invio per tornare subito)"
 
+# Italiano
+# Prefissi di log & emoji
+LANG_OK_EMOJI="✅"
+LANG_WARN_EMOJI="⚠️"
+LANG_ERROR_EMOJI="❌"
+LANG_LOG_OK_PREFIX="[SUCCESSO]"
+LANG_LOG_WARN_PREFIX="[AVVERTIMENTO]"
+LANG_LOG_ERROR_PREFIX="[ERRORE]"
+
+# Messaggi comuni
+LANG_ALREADY_DONE="Già completato, salto."
+LANG_STEP_DONE="Fatto."
+LANG_PAUSE_PROMPT="Premi Invio per continuare…"
+
+# Menu
+LANG_MENU_STATUS="Stato installazione & disinstallazione"
+LANG_MENU_EXTENSION="installa & rimuovi estensioni"
+LANG_BATCH_DONE="Batch completato"
+
 # Aggiungi nuovo utente
 LANG_ADD_XRDP_USER_TITLE="=== 👤 Aggiungi utente XRDP ==="
 LANG_ADD_XRDP_USER_PROMPT="Inserisci nuovo nome utente: "
