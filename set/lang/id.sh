@@ -192,7 +192,7 @@ LANG_T_RIGHT="┫"
 LANG_T_TOP="┳"
 
 # Title/Menu
-LANG_TITLE=""
+LANG_TITLE="menu"
 LANG_TITLE_MENU_ADD_USER="Tambah User XRDP"
 LANG_TITLE_MENU_ADDUSER="Tambah User XRDP"
 LANG_TITLE_MENU_BATCH="Install/Uninstall Batch"
