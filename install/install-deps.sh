@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # install/install-deps.sh — Install Dependencies (dasar)
 # Author : rokhanz
-# Version: 1.0.1
+# Version: 1.0.0
 # License: MIT
 
 set -euo pipefail
