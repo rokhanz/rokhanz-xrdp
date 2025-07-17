@@ -27,6 +27,8 @@ LANG_ADD_XRDP_USER_SUDO_OK="✅ User ditambahkan ke group sudo."
 LANG_ADD_XRDP_USER_SUDO_PROMPT="Tambah user ke sudo group? (y/n): "
 LANG_ADD_XRDP_USER_SUCCESS="✅ User berhasil dibuat."
 LANG_ADD_XRDP_USER_TITLE="=== 👤 Tambah User XRDP ==="
+LANG_ADD_XRDP_USER_TOTAL=""
+LANG_ADD_XRDP_USER_NAME=""
 
 # Umum / Status
 LANG_ALREADY_DONE="Sudah selesai, dilewati."
@@ -190,6 +192,7 @@ LANG_T_RIGHT="┫"
 LANG_T_TOP="┳"
 
 # Title/Menu
+LANG_TITLE=""
 LANG_TITLE_MENU_ADD_USER="Tambah User XRDP"
 LANG_TITLE_MENU_ADDUSER="Tambah User XRDP"
 LANG_TITLE_MENU_BATCH="Install/Uninstall Batch"
