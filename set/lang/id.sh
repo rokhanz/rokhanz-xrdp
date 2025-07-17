@@ -37,6 +37,25 @@ LANG_ADD_XRDP_USER_SUDO_PROMPT="Tambah user ke sudo group? (y/n): "
 LANG_ADD_XRDP_USER_SUDO_OK="✅ User ditambahkan ke group sudo."
 LANG_ADD_MENU_XRDP="➕ Tambah user baru"
 
+# Indonesia
+# Logging awalan & emoji
+LANG_OK_EMOJI="✅"
+LANG_WARN_EMOJI="⚠️"
+LANG_ERROR_EMOJI="❌"
+LANG_LOG_OK_PREFIX="[SUKSES]"
+LANG_LOG_WARN_PREFIX="[PERINGATAN]"
+LANG_LOG_ERROR_PREFIX="[GAGAL]"
+
+# Pesan umum
+LANG_ALREADY_DONE="Sudah selesai, dilewati."
+LANG_STEP_DONE="Selesai."
+LANG_PAUSE_PROMPT="Tekan Enter untuk melanjutkan…"
+
+# Menu
+LANG_MENU_STATUS="Status instalasi & penghapusan"
+LANG_MENU_EXTENSION="Pasang & lepas ekstensi"
+LANG_BATCH_DONE="Batch selesai"
+
 # Tools menu
 LANG_TOOLS_MENU_TITLE=" Install Aplikasi/Tools XRDP"
 LANG_TOOLS_INSTALL_ALL="Install Semua Tools"
