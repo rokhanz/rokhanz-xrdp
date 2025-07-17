@@ -24,6 +24,24 @@ LANG_WARN_ALREADY_INSTALLED="⚠️ Sudah disediakan."
 LANG_BACK_TO_MAIN_MENU="↩️ Kembali ke menu utama"
 LANG_BACK_MAIN="↩️ Kembali ke menu utama dalam 10 saat... (tekan Enter untuk kembali segera)"
 
+# Awalan log & emoji
+LANG_OK_EMOJI="✅"
+LANG_WARN_EMOJI="⚠️"
+LANG_ERROR_EMOJI="❌"
+LANG_LOG_OK_PREFIX="[BERJAYA]"
+LANG_LOG_WARN_PREFIX="[AMARAN]"
+LANG_LOG_ERROR_PREFIX="[GAGAL]"
+
+# Mesej umum
+LANG_ALREADY_DONE="Sudah selesai, diabaikan."
+LANG_STEP_DONE="Selesai."
+LANG_PAUSE_PROMPT="Tekan Enter untuk meneruskan…"
+
+# Menu
+LANG_MENU_STATUS="Status pasang & nyahpasang"
+LANG_MENU_EXTENSION="pasang & tanggal sambungan"
+LANG_BATCH_DONE="Batch selesai"
+
 # Tambah pengguna baru
 LANG_ADD_XRDP_USER_TITLE="=== 👤 Tambah Pengguna XRDP ==="
 LANG_ADD_XRDP_USER_PROMPT="Masukkan nama pengguna baru: "
