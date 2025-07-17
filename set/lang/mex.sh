@@ -23,6 +23,24 @@ LANG_GOODBYE=" ¡Hasta luego!"
 LANG_WARN_ALREADY_INSTALLED="⚠️ Ya configurado."
 LANG_BACK_TO_MAIN_MENU="↩️ Volver al menú principal"
 LANG_BACK_MAIN="↩️ Volviendo al menú principal en 10 segundos... (presione Enter para volver de inmediato)"
+# Español (México)
+# Prefijos de registro & emoji
+LANG_OK_EMOJI="✅"
+LANG_WARN_EMOJI="⚠️"
+LANG_ERROR_EMOJI="❌"
+LANG_LOG_OK_PREFIX="[ÉXITO]"
+LANG_LOG_WARN_PREFIX="[ADVERTENCIA]"
+LANG_LOG_ERROR_PREFIX="[ERROR]"
+
+# Mensajes comunes
+LANG_ALREADY_DONE="Ya hecho, omitiendo."
+LANG_STEP_DONE="Terminado."
+LANG_PAUSE_PROMPT="Presiona Enter para continuar…"
+
+# Menú
+LANG_MENU_STATUS="Estado de instalación & desinstalación"
+LANG_MENU_EXTENSION="instalar & quitar extensiones"
+LANG_BATCH_DONE="Batch completado"
 
 # Agregar nuevo usuario
 LANG_ADD_XRDP_USER_TITLE="=== 👤 Agregar usuario XRDP ==="
