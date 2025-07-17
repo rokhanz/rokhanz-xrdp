@@ -1,65 +1,61 @@
-#!/bin/bash
-# install-batch.sh - Batch Install XRDP + Desktop + Tools
+#!/usr/bin/env bash
+# install/install-batch.sh — Batch Install XRDP + Desktop + Tools
 # Author : rokhanz
 # Version: 1.0.1
 # License: MIT
 
-set -euo pipefail  
-IFS=$'\n\t'  
-  
-# ANSI colors  
-CYAN='\033[0;36m'  
-GREEN='\033[0;32m'  
-YELLOW='\033[0;33m'  
-RED='\033[0;31m'  
-NC='\033[0m'  
-  
-# Load bahasa dan funngsi umum  
-source ./set/set-language.sh  
-source ./lib/common.sh
+set -euo pipefail
+IFS=$'\n\t'
+
+# Tentukan direktori skrip
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Muat bahasa & fungsi umum (run_step, log_*, check_marker, write_marker)
+source "$SCRIPT_DIR/../set/set-language.sh"
+source "$SCRIPT_DIR/../lib/common.sh"
 
 clear
 echo -e "${CYAN}========================================================"
-echo -e " ${LANG_BATCH_INSTALL_TITLE:-Install Batch XRDP + Desktop + Tools}"
+echo -e "  ${LANG_BATCH_INSTALL_TITLE}"
 echo -e "========================================================${NC}"
 
-# Urutan langkah install
-run_step "${LANG_STEP_DEPS:-Install dependensi dasar}" \
-         "$SCRIPT_DIR/install-deps.sh" \
-         ""
+# Langkah 1: Install dependensi dasar
+run_step "${LANG_STEP_DEPS}" "$SCRIPT_DIR/install-deps.sh"
 
-run_step "${LANG_STEP_DESKTOP:-Install Desktop Environment}" \
+# Langkah 2: Install desktop environment
+run_step "${LANG_STEP_DESKTOP}" \
          "$SCRIPT_DIR/install-desktop.sh" \
          "xfce4|gnome-session|plasma-desktop"
 
-run_step "${LANG_STEP_XRDP:-Install XRDP Core}" \
+# Langkah 3: Install XRDP core
+run_step "${LANG_STEP_XRDP}" \
          "$SCRIPT_DIR/install-xrdp-core.sh" \
          "xrdp|xorgxrdp"
 
-run_step "${LANG_STEP_CHROME:-Install Google Chrome}" \
+# Langkah 4: Install Google Chrome
+run_step "${LANG_STEP_CHROME}" \
          "$SCRIPT_DIR/install-chrome.sh" \
          "google-chrome-stable"
 
-run_step "${LANG_STEP_VLC:-Install VLC}" \
+# Langkah 5: Install VLC
+run_step "${LANG_STEP_VLC}" \
          "$SCRIPT_DIR/install-vlc.sh" \
          "vlc"
 
-run_step "${LANG_STEP_VSCODE:-Install VSCode}" \
+# Langkah 6: Install VSCode
+run_step "${LANG_STEP_VSCODE}" \
          "$SCRIPT_DIR/install-vscode.sh" \
          "code"
 
-run_step "${LANG_STEP_CONFIG:-Konfigurasi tambahan}" \
-         "$SCRIPT_DIR/../set/set-config.sh" \
-         "conky"
+# Langkah 7: Konfigurasi tambahan (Conky, etc.)
+run_step "${LANG_STEP_CONFIG}" \
+         "$SCRIPT_DIR/../set/set-config.sh"
 
-# Ringkasan & pembuatan marker
+# Ringkasan & penanda sukses
 if [ "$error_count" -eq 0 ]; then
-  touch "$BATCH_MARKER"
-  echo -e "${GREEN}✅ ${LANG_BATCH_SUCCESS:-Semua proses install batch sukses!}${NC}"
+  write_marker batch success all
+  log_ok "${LANG_BATCH_SUCCESS}"
 else
-  echo -e "${RED}❌ ${LANG_BATCH_FAIL:-Ada error pada instalasi batch!} ($error_count errors)${NC}"
-  echo -e "${YELLOW}❗ Cek detail di $LOG_ERROR${NC}"
+  log_error "${LANG_BATCH_FAIL} ($error_count errors)"
+  echo -e "${YELLOW}${LANG_CHECK_LOG}:${NC} $LOG_FILE"
 fi
-
-echo -e "${CYAN}${LANG_BACK_TO_MAIN_MENU:-Kembali ke menu utama} (5 detik)${NC}"
-read -t 5 -p ""
