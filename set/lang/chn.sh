@@ -24,6 +24,25 @@ LANG_WARN_ALREADY_INSTALLED="⚠️ 已经设置过。"
 LANG_BACK_TO_MAIN_MENU="↩️ 返回主菜单"
 LANG_BACK_MAIN="↩️ 10 秒后返回主菜单... (按 Enter 立即返回)"
 
+# 中文
+# 日志前缀 & 表情
+LANG_OK_EMOJI="✅"
+LANG_WARN_EMOJI="⚠️"
+LANG_ERROR_EMOJI="❌"
+LANG_LOG_OK_PREFIX="[成功]"
+LANG_LOG_WARN_PREFIX="[警告]"
+LANG_LOG_ERROR_PREFIX="[失败]"
+
+# 通用消息
+LANG_ALREADY_DONE="已完成，跳过。"
+LANG_STEP_DONE="完成。"
+LANG_PAUSE_PROMPT="按 Enter 键继续…"
+
+# 菜单
+LANG_MENU_STATUS="安装 & 卸载 状态"
+LANG_MENU_EXTENSION="安装 & 移除 扩展"
+LANG_BATCH_DONE="批处理完成"
+
 # 添加新用户
 LANG_ADD_XRDP_USER_TITLE="=== 👤 添加 XRDP 用户 ==="
 LANG_ADD_XRDP_USER_PROMPT="输入新的用户名："
