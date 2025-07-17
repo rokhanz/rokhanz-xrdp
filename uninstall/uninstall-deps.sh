@@ -1,31 +1,40 @@
-#!/bin/bash
-# uninstall-deps.sh - Uninstall dependensi dasar XRDP
-# Author: rokhanz
-# Version: 1.0.0
+#!/usr/bin/env bash
+# uninstall/uninstall-deps.sh — Uninstall Base Dependencies for XRDP
+# Author : rokhanz
+# Version: 1.0.1
 # License: MIT
 
-. ./set/set-language.sh
+set -euo pipefail
+IFS=$'\n\t'
 
-CYAN='\033[0;36m'; GREEN='\033[0;32m'; RED='\033[0;31m'; YELLOW='\033[0;33m'; NC='\033[0m'
-LOG_ERROR="./logs/error.log"
-[ -d logs ] || mkdir logs
+# ────────────────────────────────────────────────────────────
+# Paths
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-log_ok()    { echo -e "${GREEN}${LANG_SUCCESS_EMOJI:-✅} $1${NC}"; }
-log_fail()  { echo -e "${RED}${LANG_FAIL_EMOJI:-❌} $1${NC}"; }
-error_log() { echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1" >> "$LOG_ERROR"; }
+# ────────────────────────────────────────────────────────────
+# Load bahasa & common helpers (run_step, log_ok, log_error)
+source "$SCRIPT_DIR/../set/set-language.sh"
+source "$SCRIPT_DIR/../lib/common.sh"
 
-clear
-echo -e "${CYAN}== Uninstall Base Dependencies ==${NC}"
+# ────────────────────────────────────────────────────────────
+# Title
+echo -e "${CYAN}${LANG_STEP_UNINSTALL_DEPS:-Uninstall Base Dependencies}${NC}"
 
+# ────────────────────────────────────────────────────────────
+# Packages to remove
 DEPS=(wget curl gpg dbus-x11 xauth)
 
-if sudo apt-get remove --purge -y "${DEPS[@]}"; then
-  log_ok "${LANG_STEP_DONE:-Selesai} (Base dependencies uninstalled)"
-else
-  log_fail "Uninstall dependencies gagal!"
-  error_log "Uninstall dependencies gagal!"
-fi
+# ────────────────────────────────────────────────────────────
+# Uninstall dependencies
+run_step "${LANG_STEP_UNINSTALL_DEPS:-Uninstall base dependencies}" \
+         "sudo apt-get remove --purge -y ${DEPS[*]}" \
+         "dpkg -l | grep -qw wget"
 
-echo -e "${YELLOW}↩️  ${LANG_BACK_TO_MAIN_MENU:-Kembali ke menu utama} (5 detik)${NC}"
-read -t 5 -p ""
-exec bash ./main.sh
+# ────────────────────────────────────────────────────────────
+# Autoremove leftover packages
+run_step "${LANG_STEP_AUTO_REMOVE:-Autoremove unused packages}" \
+         "sudo apt-get autoremove -y"
+
+# ────────────────────────────────────────────────────────────
+# Summary
+log_ok "${LANG_STEP_DONE:-✅ Base dependencies uninstalled}"
