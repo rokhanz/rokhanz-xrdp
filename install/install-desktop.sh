@@ -1,20 +1,23 @@
-#!/bin/bash
-# Install Desktop Environment
-# Author : rokhanz
-# Version: 1.0.0
-# License: MIT
+#!/usr/bin/env bash
+# install/install-desktop.sh — Install Desktop Environment
+# Author    : rokhanz
+# Version   : 1.0.0
+# License   : MIT
 
-. ./set/set-language.sh
+set -euo pipefail
+IFS=$'\n\t'
 
-CYAN='\033[0;36m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; RED='\033[0;31m'; NC='\033[0m'
+# ────────────────────────────────────────────────────────────
+# Tentukan direktori skrip ini
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-log_error() { echo -e "${RED}${LANG_FAIL_EMOJI:-❌}  $1${NC}"; }
-log_warn()  { echo -e "${YELLOW}${LANG_WARN_EMOJI:-⚠️}  $1${NC}"; }
-log_ok()    { echo -e "${GREEN}${LANG_SUCCESS_EMOJI:-✅}  $1${NC}"; }
+# ────────────────────────────────────────────────────────────
+# Muat bahasa & fungsi umum (run_step, log_*, check_marker, write_marker)
+source "$SCRIPT_DIR/../set/set-language.sh"
+source "$SCRIPT_DIR/../lib/common.sh"
 
-echo -e "${CYAN}$LANG_INSTALL_STEP_DESKTOP${NC}"
-
-# --- Pilihan Desktop Environment (via ENV atau default xfce4)
+# ────────────────────────────────────────────────────────────
+# Pilihan Desktop Environment (via ENV atau default xfce4)
 DE_CHOICE="${DE_CHOICE:-xfce4}"
 
 case "$DE_CHOICE" in
@@ -34,30 +37,30 @@ case "$DE_CHOICE" in
     DE_LABEL="GNOME"
     ;;
   *)
-    log_error "$LANG_ERROR_FAILED Desktop Environment: $DE_CHOICE"
+    log_error "${LANG_ERROR_FAILED//\{item\}/Desktop Environment: $DE_CHOICE}"
     exit 1
     ;;
 esac
 
-# --- Validasi sudah install
-if eval "$CHECK"; then
-  log_warn "$DE_LABEL $LANG_INSTALL_SKIP"
+# ────────────────────────────────────────────────────────────
+# Tampilkan langkah
+echo -e "${CYAN}${LANG_INSTALL_STEP_DESKTOP//\{item\}/$DE_LABEL}${NC}"
+
+# ────────────────────────────────────────────────────────────
+# Marker untuk desktop
+MARKER="desktop"
+
+# Jika sudah di‐marker, skip
+if check_marker "$MARKER"; then
+  log_warn "${DE_LABEL} ${LANG_INSTALL_SKIP}"
   exit 0
 fi
 
-if sudo apt-get install -y $PKGS; then
-  log_ok "$DE_LABEL $LANG_STEP_DONE"
-else
-  log_error "$DE_LABEL $LANG_INSTALL_ERROR"
-  sudo apt-get -f install -y || true
-  sudo dpkg --configure -a || true
-  sleep 1
-  # Coba ulang install 1x
-  if sudo apt-get install -y $PKGS; then
-    log_ok "$DE_LABEL $LANG_STEP_DONE"
-    exit 0
-  else
-    log_error "$DE_LABEL $LANG_INSTALL_ERROR"
-    exit 1
-  fi
-fi
+# Jalankan instalasi dengan helper run_step
+run_step "${DE_LABEL} ${LANG_INSTALL_STEP_DESKTOP//\{item\}/$DE_LABEL}" \
+         "sudo apt-get install -y $PKGS" \
+         "$CHECK"
+
+# Tandai sukses
+write_marker "$MARKER"
+```0
