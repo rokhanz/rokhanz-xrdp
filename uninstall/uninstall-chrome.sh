@@ -1,41 +1,57 @@
-#!/bin/bash
-# Uninstall Google Chrome (modular, logging, marker)
-# Author: rokhanz
-# Version: 1.0.0
+#!/usr/bin/env bash
+# uninstall/uninstall-chrome.sh — Uninstall Google Chrome (modular, logging, marker)
+# Author : rokhanz
+# Version: 1.0.1
 # License: MIT
 
-. ./set/set-language.sh
+set -euo pipefail
+IFS=$'\n\t'
 
-CYAN='\033[0;36m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; RED='\033[0;31m'; NC='\033[0m'
-LOG_ERROR="./logs/error.log"
-[ -d logs ] || mkdir logs
-MARKER="./.installed_chrome"
+# ────────────────────────────────────────────────────────────
+# Paths
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LOG_DIR="$SCRIPT_DIR/../logs"
+LOGFILE="$LOG_DIR/error.log"
+MARKER_FILE="$SCRIPT_DIR/../.installed_chrome"
 
-log_ok()    { echo -e "${GREEN}${LANG_SUCCESS_EMOJI:-✅}  $1${NC}"; }
-log_warn()  { echo -e "${YELLOW}${LANG_WARN_EMOJI:-⚠️}  $1${NC}"; }
-log_error() { echo -e "${RED}${LANG_FAIL_EMOJI:-❌}  $1${NC}"; echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1" >> "$LOG_ERROR"; }
+mkdir -p "$LOG_DIR"
 
-clear
-echo -e "${CYAN}🧹 ${LANG_STEP_UN_CHROME:-Uninstall Google Chrome}${NC}"
+# ────────────────────────────────────────────────────────────
+# Load bahasa & helpers
+source "$SCRIPT_DIR/../set/set-language.sh"
+source "$SCRIPT_DIR/../lib/common.sh"
 
+# ────────────────────────────────────────────────────────────
+# Title
+echo -e "${CYAN}${LANG_STEP_UN_CHROME:-Uninstall Google Chrome}${NC}"
+
+# ────────────────────────────────────────────────────────────
+# Skip jika belum terpasang
 if ! dpkg -l | grep -qw google-chrome-stable; then
-  log_warn "Google Chrome ${LANG_ALREADY_UNINSTALLED:-sudah dihapus!}"
-  [ -f "$MARKER" ] && rm -f "$MARKER"
-  echo -e "${CYAN}↩️  ${LANG_BACK_TO_TOOLS:-Kembali ke menu tools} (5 detik)${NC}"
-  read -t 5 -p ""
+  log_warn "${LANG_ALREADY_UNINSTALLED:-Google Chrome sudah dihapus}"
+  rm -f "$MARKER_FILE"
   exit 0
 fi
 
-sudo apt-get remove --purge -y google-chrome-stable
-sudo apt-get autoremove -y
-sudo rm -rf /etc/apt/sources.list.d/google-chrome.list /tmp/chrome.deb
-[ -f "$MARKER" ] && rm -f "$MARKER"
+# ────────────────────────────────────────────────────────────
+# Uninstall Chrome
+run_step "${LANG_STEP_UN_CHROME}" \
+         "sudo apt-get remove --purge -y google-chrome-stable" \
+         "dpkg -l | grep -qw google-chrome-stable"
 
-if ! dpkg -l | grep -qw google-chrome-stable; then
-  log_ok "Google Chrome ${LANG_STEP_DONE:-Selesai uninstall}"
-else
-  log_error "Google Chrome gagal dihapus!"
-fi
+# Autoremove sisa paket
+run_step "${LANG_STEP_AUTO_REMOVE:-Autoremove sisa paket}" \
+         "sudo apt-get autoremove -y" \
+         ""
 
-echo -e "${CYAN}↩️  ${LANG_BACK_TO_TOOLS:-Kembali ke menu tools} (5 detik)${NC}"
-read -t 5 -p ""
+# ────────────────────────────────────────────────────────────
+# Cleanup sources & temp files
+sudo rm -f /etc/apt/sources.list.d/google-chrome.list /tmp/chrome.deb || true
+
+# ────────────────────────────────────────────────────────────
+# Hapus marker
+rm -f "$MARKER_FILE"
+
+# ────────────────────────────────────────────────────────────
+# Selesai
+log_ok "${LANG_STEP_DONE:-Selesai uninstall Google Chrome}"
