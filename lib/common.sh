@@ -49,14 +49,16 @@ remove_marker() {
 
 # ────────────────────────────────────────────────────────────
 # run_step <description> <script_path> [<check_command>]
-# - Jika <check_command> sukses → skip
-# - Menjalankan <script_path>, mencatat output ke LOG_FILE
 run_step() {
-  local desc="$1" script="$2" check="$3"
+  local desc="$1" script="$2" check="${3:-}"
   echo -e "${CYAN}→ $desc${NC}"
   if [[ -n "$check" ]] && eval "$check" >/dev/null 2>&1; then
     log_warn "$desc sudah terpenuhi, skip."
     return 0
+  fi
+  if [ ! -f "$script" ]; then
+    log_error "Script $script tidak ditemukan!"
+    return 1
   fi
   if bash "$script" >> "$LOG_FILE" 2>&1; then
     log_ok  "$desc selesai."
