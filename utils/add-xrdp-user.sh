@@ -1,28 +1,14 @@
 #!/usr/bin/env bash
 # utils/add-xrdp-user.sh — Tambah user XRDP (multi–bahasa + emoji)
 # Author: rokhanz
-# Version: 1.0.0
+# Version: 1.0.1
 # License: MIT
 
 set -euo pipefail
 IFS=$'\n\t'
 
-# ANSI colors
-CYAN='\033[0;36m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; RED='\033[0;31m'; NC='\033[0m'
-
-# Load bahasa & common helpers
 source ./set/set-language.sh
 source ./lib/common.sh
-
-MARKER="user"   # kita pakai type "user" untuk marker/user.json
-
-# Jika marker sudah ada, skip
-if check_marker "$MARKER"; then
-  log_warn "${LANG_ADD_XRDP_USER_EXISTS}"
-  echo -e "${YELLOW}${LANG_BACK_TO_MAIN_MENU}${NC}"
-  read -r -p "${LANG_BACK_TO_MAIN_MENU}"
-  exit 0
-fi
 
 echo -e "${CYAN}${LANG_ADD_XRDP_USER_TITLE}${NC}"
 read -r -p "${LANG_ADD_XRDP_USER_PROMPT}" xuser
@@ -34,6 +20,7 @@ else
     log_ok "${LANG_ADD_XRDP_USER_SUCCESS}"
   else
     log_error "${LANG_ADD_XRDP_USER_FAIL}"
+    echo -e "${RED}${LANG_ADD_XRDP_USER_FAIL}${NC}"
     exit 1
   fi
 fi
@@ -45,6 +32,8 @@ if echo "$xuser:$xpasswd" | sudo chpasswd; then
   log_ok "${LANG_ADD_XRDP_USER_PASS_SET}"
 else
   log_error "${LANG_ADD_XRDP_USER_PASS_FAIL}"
+  echo -e "${RED}${LANG_ADD_XRDP_USER_PASS_FAIL}${NC}"
+  exit 1
 fi
 
 # Opsi sudo
@@ -52,14 +41,12 @@ read -r -p "${LANG_ADD_XRDP_USER_SUDO_PROMPT}" gs
 if [[ "$gs" =~ ^[Yy]$ ]]; then
   if sudo usermod -aG sudo "$xuser"; then
     log_ok "${LANG_ADD_XRDP_USER_SUDO_OK}"
-  else
-    log_error "${LANG_ADD_XRDP_USER_FAIL}"
   fi
 fi
 
-# Tulis marker supaya tidak ulangi
-write_marker "$MARKER" "$xuser"
+# Ekspor variabel untuk autologin ke session selanjutnya
+export XRDP_NEW_USER="$xuser"
+export XRDP_NEW_PASS="$xpasswd"
 
-# Kembali ke menu
 echo -e "${YELLOW}${LANG_BACK_TO_MAIN_MENU}${NC}"
 read -r -p "${LANG_BACK_TO_MAIN_MENU}"
