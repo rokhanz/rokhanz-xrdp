@@ -1,38 +1,51 @@
-#!/bin/bash
-# Uninstall XRDP Core
-# Author: rokhanz
-# Version: 1.0.0
+#!/usr/bin/env bash
+# uninstall/uninstall-xrdp.sh — Uninstall XRDP Core
+# Author : rokhanz
+# Version: 1.0.1
 # License: MIT
 
-. ./set/set-language.sh
+set -euo pipefail
+IFS=$'\n\t'
 
-CYAN='\033[0;36m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; RED='\033[0;31m'; NC='\033[0m'
-LOG_ERROR="./logs/error.log"
-[ -d logs ] || mkdir logs
-MARKER="./.installed_xrdp_core"
+# Paths
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LOG_DIR="$SCRIPT_DIR/../logs"
+LOGFILE="$LOG_DIR/error.log"
+MARKER="xrdp_core"
 
-log_ok()    { echo -e "${GREEN}${LANG_SUCCESS_EMOJI:-✅}  $1${NC}"; }
-log_warn()  { echo -e "${YELLOW}${LANG_WARN_EMOJI:-⚠️}  $1${NC}"; }
-log_error() { echo -e "${RED}${LANG_FAIL_EMOJI:-❌}  $1${NC}"; echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1" >> "$LOG_ERROR"; }
+mkdir -p "$LOG_DIR"
 
-clear
-echo -e "${CYAN}🧹 ${LANG_STEP_UN_XRDP:-Uninstall XRDP Core}${NC}"
+# Load bahasa & helpers
+source "$SCRIPT_DIR/../set/set-language.sh"
+source "$SCRIPT_DIR/../lib/common.sh"
 
+# Title
+echo -e "${CYAN}${LANG_STEP_UN_XRDP:-Uninstall XRDP Core}${NC}"
+
+# Cek sudah terpasang
 if ! dpkg -l | grep -qw xrdp; then
-  log_warn "XRDP Core ${LANG_ALREADY_UNINSTALLED:-sudah dihapus!}"
-  [ -f "$MARKER" ] && rm -f "$MARKER"
-  echo -e "${CYAN}↩️  ${LANG_BACK_TO_TOOLS:-Kembali ke menu tools} (5 detik)${NC}"
-  read -t 5 -p ""
+  log_warn "${LANG_ALREADY_UNINSTALLED:-XRDP Core sudah dihapus}"
+  write_marker "$MARKER" false 2>/dev/null || true
   exit 0
 fi
 
-sudo systemctl stop xrdp xrdp-sesman 2>/dev/null
-sudo apt-get remove --purge -y xrdp xorgxrdp
-sudo apt-get autoremove -y
-sudo rm -rf /etc/xrdp
-[ -f "$MARKER" ] && rm -f "$MARKER"
+# Stop services
+sudo systemctl stop xrdp xrdp-sesman 2>/dev/null || true
 
-log_ok "XRDP Core ${LANG_STEP_DONE:-Selesai uninstall}"
+# Uninstall paket XRDP
+run_step "${LANG_STEP_UN_XRDP:-Uninstall XRDP Core}" \
+         "sudo apt-get remove --purge -y xrdp xorgxrdp" \
+         "dpkg -l | grep -qw xrdp"
 
+# Autoremove dependensi
+run_step "${LANG_STEP_AUTO_REMOVE:-Autoremove unused packages}" "sudo apt-get autoremove -y"
+
+# Hapus direktori & marker
+sudo rm -rf /etc/xrdp || true
+write_marker "$MARKER" false
+
+log_ok "${LANG_STEP_DONE:-✅ XRDP Core berhasil di-uninstall}"
+
+# Selesai
 echo -e "${CYAN}↩️  ${LANG_BACK_TO_TOOLS:-Kembali ke menu tools} (5 detik)${NC}"
 read -t 5 -p ""
