@@ -1,22 +1,33 @@
-#!/bin/bash
-# Set/Config: conky, autostart, custom config, wallpaper branding
+#!/usr/bin/env bash
+# set/set-conky.sh — Set/Config: conky, autostart, custom config, wallpaper branding
 # Author : rokhanz
-# Version: 1.0.0
+# Version: 1.0.1
 # License: MIT
 
-. ./set/set-language.sh
+set -euo pipefail
+IFS=$'\n\t'
 
-CYAN='\033[0;36m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; RED='\033[0;31m'; NC='\033[0m'
+source ./set/set-language.sh 2>/dev/null || true
+
+CYAN='\033[0;36m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
+NC='\033[0m'
 
 log_ok()    { echo -e "${GREEN}${LANG_SUCCESS_EMOJI:-✅}  $1${NC}"; }
 log_warn()  { echo -e "${YELLOW}${LANG_WARN_EMOJI:-⚠️}  $1${NC}"; }
 log_error() { echo -e "${RED}${LANG_FAIL_EMOJI:-❌}  $1${NC}"; }
 
-echo -e "${CYAN}$LANG_INSTALL_STEP_CONFIG${NC}"
+echo -e "${CYAN}${LANG_INSTALL_STEP_CONFIG:-Konfigurasi Conky & Branding}${NC}"
 
 # --- Install Conky jika belum ada
 if ! dpkg -l | grep -qw conky; then
-  sudo apt-get install -y conky || log_warn "Conky $LANG_ERROR_FAILED"
+  if sudo apt-get install -y conky; then
+    log_ok "Conky ${LANG_STEP_DONE:-Selesai install}"
+  else
+    log_warn "Conky ${LANG_ERROR_FAILED:-Gagal install}"
+  fi
 fi
 
 # --- Buat config conky & autostart di /etc/skel (untuk user baru)
@@ -71,8 +82,12 @@ EOL
 wallpaper_url="https://raw.githubusercontent.com/rokhanz/myimg/main/assets/image/chips_rokhanz.png"
 wallpaper_dest="/usr/share/backgrounds/chips_rokhanz.png"
 if [ ! -f "$wallpaper_dest" ]; then
-  wget -qO "$wallpaper_dest" "$wallpaper_url" && log_ok "Wallpaper branding $LANG_STEP_DONE" || log_warn "Wallpaper $LANG_ERROR_FAILED"
+  if wget -qO "$wallpaper_dest" "$wallpaper_url"; then
+    log_ok "Wallpaper branding ${LANG_STEP_DONE:-Selesai download}"
+  else
+    log_warn "Wallpaper ${LANG_ERROR_FAILED:-Gagal download}"
+  fi
 fi
 
 # --- Sukses
-log_ok "$LANG_STEP_DONE"
+log_ok "${LANG_STEP_DONE:-Selesai}"
