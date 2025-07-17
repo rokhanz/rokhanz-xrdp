@@ -23,7 +23,24 @@ LANG_GOODBYE=" Görüşürüz!"
 LANG_WARN_ALREADY_INSTALLED="⚠️ Zaten yapılandırıldı."
 LANG_BACK_TO_MAIN_MENU="↩️ Ana menüye dön"
 LANG_BACK_MAIN="↩️ 10 saniye içinde ana menüye dönülüyor... (hemen dönmek için Enter'a basın)"
+# Türkçe
+# Günlük önekleri & emoji
+LANG_OK_EMOJI="✅"
+LANG_WARN_EMOJI="⚠️"
+LANG_ERROR_EMOJI="❌"
+LANG_LOG_OK_PREFIX="[BAŞARILI]"
+LANG_LOG_WARN_PREFIX="[UYARI]"
+LANG_LOG_ERROR_PREFIX="[HATA]"
 
+# Genel mesajlar
+LANG_ALREADY_DONE="Zaten yapıldı, atlanıyor."
+LANG_STEP_DONE="Tamamlandı."
+LANG_PAUSE_PROMPT="Devam etmek için Enter tuşuna basın…"
+
+# Menü
+LANG_MENU_STATUS="Kurulum & kaldırma durumu"
+LANG_MENU_EXTENSION="uzantıları kur & kaldır"
+LANG_BATCH_DONE="Batch tamamlandı"
 # Yeni kullanıcı ekle
 LANG_ADD_XRDP_USER_TITLE="=== 👤 XRDP Kullanıcısı Ekle ==="
 LANG_ADD_XRDP_USER_PROMPT="Yeni kullanıcı adını girin: "
