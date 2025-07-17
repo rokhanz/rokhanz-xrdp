@@ -1,46 +1,55 @@
-#!/bin/bash
-# Install Google Chrome (modular, logging, marker)
+#!/usr/bin/env bash
+# install/install-chrome.sh — Install Google Chrome (modular, logging, marker)
 # Author: rokhanz
 # Version: 1.0.0
 # License: MIT
 
-. ./set/set-language.sh
+set -euo pipefail
+IFS=$'\n\t'
 
-CYAN='\033[0;36m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; RED='\033[0;31m'; NC='\033[0m'
-LOG_ERROR="./logs/error.log"
-[ -d logs ] || mkdir logs
-MARKER="./.installed_chrome"
+# ——————————————————————————————————————————————
+# Load bahasa & common helpers
+source "$(dirname "$0")/../set/set-language.sh"
+source "$(dirname "$0")/../lib/common.sh"
 
-log_ok()    { echo -e "${GREEN}${LANG_SUCCESS_EMOJI:-✅}  $1${NC}"; }
-log_warn()  { echo -e "${YELLOW}${LANG_WARN_EMOJI:-⚠️}  $1${NC}"; }
-log_error() { echo -e "${RED}${LANG_FAIL_EMOJI:-❌}  $1${NC}"; echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1" >> "$LOG_ERROR"; }
+# ——————————————————————————————————————————————
+# Define marker name (used by check_marker/write_marker)
+MARKER="chrome"
 
 clear
-echo -e "${CYAN}🌐 ${LANG_STEP_CHROME:-Install Google Chrome}${NC}"
+echo -e "${CYAN}🌐  ${LANG_STEP_CHROME}${NC}"
 
-if [ -f "$MARKER" ]; then
-  log_ok "Google Chrome ${LANG_ALREADY_INSTALLED:-sudah terpasang}"
+# ——————————————————————————————————————————————
+# Skip if we’ve already marked this as installed
+if check_marker "$MARKER"; then
+  log_ok "${LANG_ALREADY_INSTALLED}"
   exit 0
 fi
 
+# ——————————————————————————————————————————————
+# If Chrome is already on the system, write marker and skip
 if dpkg -l | grep -qw google-chrome-stable; then
-  log_ok "Google Chrome ${LANG_ALREADY_INSTALLED:-sudah terpasang (dari sistem)}"
-  touch "$MARKER"
+  write_marker "$MARKER"
+  log_ok "${LANG_ALREADY_INSTALLED_SYSTEM}"
   exit 0
 fi
 
-# Proses installasi
-sudo apt-get update
-wget -q -O /tmp/chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-if sudo dpkg -i /tmp/chrome.deb; then
-  sudo apt-get install -f -y
-  touch "$MARKER"
-  log_ok "Google Chrome ${LANG_STEP_DONE:-Selesai}"
-  sudo rm -f /tmp/chrome.deb
-else
-  log_error "Google Chrome ${LANG_FAIL_EMOJI:-Gagal install!}"
-  sudo rm -f /tmp/chrome.deb
-fi
+# ——————————————————————————————————————————————
+# 1) Update package lists
+run_step "${LANG_STEP_UPDATE}" "sudo apt-get update"
 
-echo -e "${CYAN}↩️  ${LANG_BACK_TO_TOOLS:-Kembali ke menu tools} (5 detik)${NC}"
-read -t 5 -p ""
+# 2) Download the .deb
+run_step "${LANG_STEP_DOWNLOAD}" \
+  "wget -q -O /tmp/chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+
+# 3) Install the .deb
+run_step "${LANG_STEP_INSTALL}" "sudo dpkg -i /tmp/chrome.deb"
+
+# 4) Fix any missing deps
+run_step "${LANG_STEP_FIX_DEPS}" "sudo apt-get install -f -y"
+
+# ——————————————————————————————————————————————
+# Mark success & cleanup
+write_marker "$MARKER"
+log_ok "${LANG_STEP_DONE}"
+sudo rm -f /tmp/chrome.deb
