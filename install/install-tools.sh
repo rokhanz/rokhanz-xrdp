@@ -1,40 +1,46 @@
-#!/bin/bash
-# Install Tools Bundle (Chrome, VLC, VSCode, dst)
-# Author: rokhanz
+#!/usr/bin/env bash
+# install/install-tools.sh — Install Tools Bundle (Chrome, VLC, VSCode)
+# Author : rokhanz
 # Version: 1.0.0
 # License: MIT
 
-. ./set/set-language.sh
+set -euo pipefail
+IFS=$'\n\t'
 
-CYAN='\033[0;36m'; YELLOW='\033[0;33m'; NC='\033[0m'
+# Direktori skrip ini
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-while true; do
-  clear
-  echo -e "${CYAN}========================================================"
-  echo -e " ${LANG_TOOLS_MENU_TITLE:-📦 Install Aplikasi/Tools XRDP}"
-  echo -e "========================================================${NC}"
-  echo -e "[1] Google Chrome"
-  echo -e "[2] VLC Media Player"
-  echo -e "[3] VSCode"
-  echo -e "[4] ${LANG_TOOLS_INSTALL_ALL:-Install Semua Tools}"
-  echo -e "[5] 🔙 ${LANG_BACK_TO_MAIN_MENU:-Kembali ke menu utama}"
-  echo    "--------------------------------------------------------"
-  read -p "${LANG_MENU_PROMPT} " tools_choice
+# Muat bahasa & fungsi umum
+source "$SCRIPT_DIR/../set/set-language.sh"
+source "$SCRIPT_DIR/../lib/common.sh"
 
-  case "$tools_choice" in
-    1) clear; bash ./install/install-chrome.sh ;;
-    2) clear; bash ./install/install-vlc.sh ;;
-    3) clear; bash ./install/install-vscode.sh ;;
-    4)
-      clear
-      bash ./install/install-chrome.sh
-      bash ./install/install-vlc.sh
-      bash ./install/install-vscode.sh
-      ;;
-    5) break ;;
-    *) echo -e "${YELLOW}${LANG_INVALID_OPTION:-Pilihan tidak valid}${NC}"; sleep 2 ;;
-  esac
+# Marker untuk bundle tools
+MARKER="tools"
 
-  echo -e "${YELLOW}↩️  ${LANG_BACK_TO_MAIN_MENU} (5 detik)${NC}"
-  read -t 5 -p ""
-done
+clear
+echo -e "${CYAN}${LANG_TOOLS_MENU_TITLE}${NC}"
+
+# Lewati jika sudah dipasang
+if check_marker "$MARKER"; then
+  log_ok "${LANG_ALREADY_INSTALLED}"
+  exit 0
+fi
+
+# Install Google Chrome
+run_step "${LANG_STEP_CHROME}" \
+         "$SCRIPT_DIR/install-chrome.sh" \
+         "dpkg -l | grep -qw google-chrome-stable"
+
+# Install VLC
+run_step "${LANG_STEP_VLC}" \
+         "$SCRIPT_DIR/install-vlc.sh" \
+         "dpkg -l | grep -qw vlc"
+
+# Install VSCode
+run_step "${LANG_STEP_VSCODE}" \
+         "$SCRIPT_DIR/install-vscode.sh" \
+         "dpkg -l | grep -qw code"
+
+# Tandai sukses dan ringkasan
+write_marker "$MARKER"
+log_ok "${LANG_STEP_DONE}"
