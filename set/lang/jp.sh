@@ -24,6 +24,25 @@ LANG_WARN_ALREADY_INSTALLED="⚠️ 既に設定されています."
 LANG_BACK_TO_MAIN_MENU="↩️ メインメニューに戻る"
 LANG_BACK_MAIN="↩️ 10秒後にメインメニューに戻ります... (Enterキーで即時戻る)"
 
+# 日本語
+# ログ接頭辞 & 絵文字
+LANG_OK_EMOJI="✅"
+LANG_WARN_EMOJI="⚠️"
+LANG_ERROR_EMOJI="❌"
+LANG_LOG_OK_PREFIX="[成功]"
+LANG_LOG_WARN_PREFIX="[警告]"
+LANG_LOG_ERROR_PREFIX="[失敗]"
+
+# 共通メッセージ
+LANG_ALREADY_DONE="既に完了、スキップします。"
+LANG_STEP_DONE="完了。"
+LANG_PAUSE_PROMPT="続行するには Enter キーを押してください…"
+
+# メニュー
+LANG_MENU_STATUS="インストール & アンインストール 状態"
+LANG_MENU_EXTENSION="拡張機能 インストール & 削除"
+LANG_BATCH_DONE="バッチ完了"
+
 # 新しいユーザーを追加
 LANG_ADD_XRDP_USER_TITLE="=== 👤 XRDP ユーザーを追加 ==="
 LANG_ADD_XRDP_USER_PROMPT="新しいユーザー名を入力してください: "
