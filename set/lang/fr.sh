@@ -24,6 +24,24 @@ LANG_WARN_ALREADY_INSTALLED="⚠️ Déjà configuré."
 LANG_BACK_TO_MAIN_MENU="↩️ Retour au menu principal"
 LANG_BACK_MAIN="↩️ Retour au menu principal dans 10 secondes... (appuyez sur Entrée pour revenir immédiatement)"
 
+# Préfixes de journalisation & emoji
+LANG_OK_EMOJI="✅"
+LANG_WARN_EMOJI="⚠️"
+LANG_ERROR_EMOJI="❌"
+LANG_LOG_OK_PREFIX="[SUCCÈS]"
+LANG_LOG_WARN_PREFIX="[AVERTISSEMENT]"
+LANG_LOG_ERROR_PREFIX="[ERREUR]"
+
+# Messages courants
+LANG_ALREADY_DONE="Déjà fait, ignore."
+LANG_STEP_DONE="Terminé."
+LANG_PAUSE_PROMPT="Appuyez sur Entrée pour continuer…"
+
+# Menu
+LANG_MENU_STATUS="Statut installation & désinstallation"
+LANG_MENU_EXTENSION="installer & retirer les extensions"
+LANG_BATCH_DONE="Batch terminé"
+
 # Ajouter un nouvel utilisateur
 LANG_ADD_XRDP_USER_TITLE="=== 👤 Ajouter un utilisateur XRDP ==="
 LANG_ADD_XRDP_USER_PROMPT="Entrez un nouveau nom d’utilisateur : "
