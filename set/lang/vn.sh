@@ -24,6 +24,25 @@ LANG_WARN_ALREADY_INSTALLED="⚠️ Đã cấu hình trước đó."
 LANG_BACK_TO_MAIN_MENU="↩️ Quay lại menu chính"
 LANG_BACK_MAIN="↩️ Quay lại menu chính sau 10 giây... (nhấn Enter để quay lại ngay)"
 
+# Tiếng Việt
+# Tiền tố ghi nhật ký & emoji
+LANG_OK_EMOJI="✅"
+LANG_WARN_EMOJI="⚠️"
+LANG_ERROR_EMOJI="❌"
+LANG_LOG_OK_PREFIX="[THÀNH CÔNG]"
+LANG_LOG_WARN_PREFIX="[CẢNH BÁO]"
+LANG_LOG_ERROR_PREFIX="[LỖI]"
+
+# Thông điệp chung
+LANG_ALREADY_DONE="Đã xong, bỏ qua."
+LANG_STEP_DONE="Hoàn thành."
+LANG_PAUSE_PROMPT="Nhấn Enter để tiếp tục…"
+
+# Menu
+LANG_MENU_STATUS="Trạng thái cài đặt & gỡ"
+LANG_MENU_EXTENSION="cài & gỡ tiện ích"
+LANG_BATCH_DONE="Đã hoàn tất batch"
+
 # Thêm người dùng 
 LANG_ADD_XRDP_USER_TITLE="=== 👤 Thêm người dùng XRDP ==="
 LANG_ADD_XRDP_USER_PROMPT="Nhập tên người dùng mới: "
