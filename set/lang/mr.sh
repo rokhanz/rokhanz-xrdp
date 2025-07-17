@@ -24,6 +24,25 @@ LANG_WARN_ALREADY_INSTALLED="⚠️ ယခင်တုန်းက ပြင်�
 LANG_BACK_TO_MAIN_MENU="↩️ အဓိကမီနူးသို့ ပြန်သွားမည်"
 LANG_BACK_MAIN="↩️ 10 စက္ကန့်အတွင်း အဓိကမီနူးသို့ ပြန်သွားမည်... (Enter နှိပ်ပါ)"
 
+# မြန်မာ
+# မှတ်တမ်းအတွက်နာမ်နာရေးများ & emoji
+LANG_OK_EMOJI="✅"
+LANG_WARN_EMOJI="⚠️"
+LANG_ERROR_EMOJI="❌"
+LANG_LOG_OK_PREFIX="[အောင်မြင်]"
+LANG_LOG_WARN_PREFIX="[သတိပေးချက်]"
+LANG_LOG_ERROR_PREFIX="[အဆိုး]"
+
+# မူလစာတိုများ
+LANG_ALREADY_DONE="ပြီးသွားပြီ၊ ကျော်မည်။"
+LANG_STEP_DONE="ပြီးစီးပါ ပြီ။"
+LANG_PAUSE_PROMPT="ဆက်ရန် Enter ကို နှိပ်ပါ…"
+
+# မီနူး
+LANG_MENU_STATUS="စနစ်တပ်ဆင်ခြင်း & ဖယ်ရှားခြင်း အခြေအနေ"
+LANG_MENU_EXTENSION="Extension တပ်ဆင် & ဖယ်ရှား"
+LANG_BATCH_DONE="Batch ပြီးဆုံး"
+
 # အသုံးပြုသူ အသစ် ထည့်မည်
 LANG_ADD_XRDP_USER_TITLE="=== 👤 XRDP အသုံးပြုသူ ထည့်မယ် ==="
 LANG_ADD_XRDP_USER_PROMPT="အသုံးပြုသူနာမည် အသစ် ထည့်ပါ: "
