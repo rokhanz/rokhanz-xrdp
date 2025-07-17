@@ -63,4 +63,3 @@ run_step "${DE_LABEL} ${LANG_INSTALL_STEP_DESKTOP//\{item\}/$DE_LABEL}" \
 
 # Tandai sukses
 write_marker "$MARKER"
-```0
