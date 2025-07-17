@@ -1,79 +1,86 @@
-#!/bin/bash
-# uninstall-batch.sh - Full Uninstall XRDP + Desktop + Tools with Validation
-# Author: rokhanz
-# Version: 1.0.2
+#!/usr/bin/env bash
+# uninstall/uninstall-batch.sh — Full Uninstall XRDP + Desktop + Tools
+# Author : rokhanz
+# Version: 1.0.1
 # License: MIT
 
 set -euo pipefail
 IFS=$'\n\t'
 
-# ANSI colors
-CYAN='\033[0;36m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-RED='\033[0;31m'
-NC='\033[0m'
+# ────────────────────────────────────────────────────────────
+# Direktori skrip ini
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Load bahasa dan funngsi umum
-source ./set/set-language.sh
-source ./lib/common.sh
+# ────────────────────────────────────────────────────────────
+# Muat bahasa & helper umum (run_step, log_ok, log_warn, log_error, check_marker, write_marker)
+source "$SCRIPT_DIR/../set/set-language.sh"
+source "$SCRIPT_DIR/../lib/common.sh"
 
-# Prepare error logging
-LOG_ERROR="./logs/error.log"
-[ -d logs ] || mkdir -p logs
-error_log() {
-  echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1" >> "$LOG_ERROR"
-}
+# ────────────────────────────────────────────────────────────
+# Setup logging
+LOG_DIR="$SCRIPT_DIR/../logs"
+LOG_ERROR="$LOG_DIR/error.log"
+mkdir -p "$LOG_DIR"
 
+# ────────────────────────────────────────────────────────────
+# Banner
 clear
-echo -e "${CYAN}========================================================"
-echo -e " ${LANG_BATCH_UNINSTALL_TITLE:-Batch Uninstall XRDP + Desktop + Tools}"
-echo -e "========================================================${NC}"
+echo -e "${CYAN}========================================================${NC}"
+echo -e "  ${LANG_BATCH_UNINSTALL_TITLE}${NC}"
+echo -e "${CYAN}========================================================${NC}"
 echo
 
-# 1) Stop & kill all relevant services
-echo -e "${CYAN} Stopping services & killing zombie processes...${NC}"
-bash ../utils/stop-services.sh || error_log "stop-services.sh failed"
+# ────────────────────────────────────────────────────────────
+# 1) Stop & kill services
+run_step "${LANG_STEP_STOP_SERVICES:-Stopping services}" \
+         "bash \"$SCRIPT_DIR/../utils/stop-services.sh\"" || log_error "stop-services.sh failed"
 echo
 
-# 2) Core XRDP uninstall
-echo -e "${YELLOW}→ Uninstall XRDP Core...${NC}"
-bash ../uninstall-xrdp.sh || error_log "uninstall-xrdp.sh failed"
+# ────────────────────────────────────────────────────────────
+# 2) Uninstall XRDP core
+run_step "${LANG_STEP_UNINSTALL_XRDP:-Uninstall XRDP Core}" \
+         "bash \"$SCRIPT_DIR/../uninstall-xrdp.sh\"" || log_error "uninstall-xrdp.sh failed"
 echo
 
-# 3) Remove Desktop Environment (XFCE4)
-echo -e "${YELLOW}→ Removing XFCE4 and related packages...${NC}"
-sudo apt purge -y xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils \
-  || error_log "XFCE4 purge failed"
+# ────────────────────────────────────────────────────────────
+# 3) Purge Desktop Environment
+run_step "${LANG_STEP_UNINSTALL_DESKTOP:-Removing Desktop Environment}" "\
+sudo apt-get purge -y xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils" || log_error "Desktop purge failed"
 echo
 
-# 4) Remove additional tools
-echo -e "${YELLOW}→ Removing additional tools...${NC}"
-sudo apt purge -y conky-all xscreensaver flameshot ristretto gnome-software \
-  || error_log "Tools purge failed"
+# ────────────────────────────────────────────────────────────
+# 4) Purge additional tools
+run_step "${LANG_STEP_UNINSTALL_TOOLS:-Removing additional tools}" "\
+sudo apt-get purge -y conky-all xscreensaver flameshot ristretto gnome-software" || log_error "Tools purge failed"
 echo
 
-# 5) Autoremove & autoclean
-echo -e "${YELLOW}→ Autoremove & cleanup...${NC}"
-sudo apt autoremove -y \
-  && sudo apt autoclean -y \
-  || error_log "Autoremove/autoclean failed"
+# ────────────────────────────────────────────────────────────
+# 5) Autoremove & cleanup
+run_step "${LANG_STEP_CLEANUP:-Autoremove & cleanup}" "\
+sudo apt-get autoremove -y && sudo apt-get autoclean -y" || log_error "Cleanup failed"
 echo
 
+# ────────────────────────────────────────────────────────────
 # 6) Remove markers
-echo -e "${YELLOW}→ Cleaning up markers...${NC}"
-rm -f ./.installed_batch ../.marker_bot_uptime 2>/dev/null
+echo -e "${YELLOW}${LANG_CLEAN_MARKERS:-Cleaning up markers...}${NC}"
+rm -f "$SCRIPT_DIR/../.installed_chrome" \
+      "$SCRIPT_DIR/../.installed_vlc" \
+      "$SCRIPT_DIR/../.installed_vscode_ext" \
+      "$SCRIPT_DIR/../marker/batch.json" \
+      2>/dev/null || true
 echo
 
-# 7) Summary
+# ────────────────────────────────────────────────────────────
+# Summary
 if [ ! -s "$LOG_ERROR" ]; then
-  echo -e "${GREEN}${LANG_BATCH_UNINSTALL_SUCCESS:-Semua komponen batch berhasil di-uninstall!}${NC}"
+  log_ok "${LANG_BATCH_UNINSTALL_SUCCESS:-✅ Semua komponen berhasil di-uninstall}"
 else
-  echo -e "${RED}${LANG_BATCH_UNINSTALL_FAIL:-Beberapa error terjadi saat uninstall batch.}${NC}"
-  echo -e "${YELLOW}Periksa $LOG_ERROR untuk detail.${NC}"
+  log_error "${LANG_BATCH_UNINSTALL_FAIL:-❌ Beberapa error terjadi saat uninstall}"
+  echo -e "${YELLOW}${LANG_CHECK_LOG_FILE:-Periksa log untuk detail:}$LOG_ERROR${NC}"
 fi
-echo
 
-# 8) Back to main menu
-echo -e "${CYAN}${LANG_BACK_TO_MAIN_MENU:-Tekan Enter atau tunggu 10 detik untuk kembali ke menu utama}${NC}"
-read -t 10 -p ""
+# ────────────────────────────────────────────────────────────
+# Kembali ke main menu
+echo -e "${CYAN}${LANG_BACK_TO_MAIN_MENU:-Tekan Enter untuk kembali ke menu utama}${NC}"
+read -r -t 10 -p ""
+```0
