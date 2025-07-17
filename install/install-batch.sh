@@ -4,49 +4,19 @@
 # Version: 1.0.1
 # License: MIT
 
-set -e
-
-# Muat terjemahan & warna
-./set/set-language.sh
-CYAN='\033[0;36m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-RED='\033[0;31m'
-NC='\033[0m'
-
-# Tentukan direktori skrip agar semua path konsisten
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# Definisikan log dan marker (marker tetap bisa dibuat, tapi pengecekan dihapus)
-LOG_ERROR="$SCRIPT_DIR/../logs/error.log"
-BATCH_MARKER="$SCRIPT_DIR/../.installed_batch"
-mkdir -p "$(dirname "$LOG_ERROR")"
-
-error_count=0
-step_count=1
-
-run_step() {
-  local title="$1"
-  local cmd="$2"
-  local pkg_regex="$3"
-
-  echo -e "${CYAN}[${step_count}] ▶️ ${title}...${NC}"
-
-  # Skip jika paket sudah terpasang (hanya jika regex diberikan)
-  if [ -n "$pkg_regex" ] && dpkg -l | grep -E "$pkg_regex" >/dev/null 2>&1; then
-    echo -e "${GREEN}✔ Skip ${title}, sudah terpasang${NC}"
-  else
-    if eval "$cmd"; then
-      echo -e "${GREEN}✅ ${title} selesai${NC}"
-    else
-      echo -e "${RED}❌ ${title} gagal${NC}"
-      echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] Step \"${title}\" gagal" >> "$LOG_ERROR"
-      ((error_count++))
-    fi
-  fi
-
-  ((step_count++))
-}
+set -euo pipefail  
+IFS=$'\n\t'  
+  
+# ANSI colors  
+CYAN='\033[0;36m'  
+GREEN='\033[0;32m'  
+YELLOW='\033[0;33m'  
+RED='\033[0;31m'  
+NC='\033[0m'  
+  
+# Load bahasa dan funngsi umum  
+source ./set/set-language.sh  
+source ./lib/common.sh
 
 clear
 echo -e "${CYAN}========================================================"
