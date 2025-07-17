@@ -62,7 +62,7 @@ EOF
 }
 
 # ────────────────────────────────────────────────────────────
-# Submenu: Batch Install / Uninstall XRDP & Desktop
+# Submenu: Batch Install / Uninstall
 menu_batch() {
   local opt
   while true; do
@@ -73,18 +73,29 @@ menu_batch() {
     echo "3. ${LANG_BATCH_MINIMAL_UNINSTALL}"
     echo "4. ${LANG_BATCH_FULL_UNINSTALL}"
     echo "9. ${LANG_BACK_TO_MAIN_MENU}"
-    read -r -p "${LANG_MENU_PROMPT}" opt
+    read -r -p "${LANG_MENU_PROMPT} " opt
     case "$opt" in
-      1) run_step "${LANG_BATCH_MINIMAL_INSTALL}" "./install/install-xrdp.sh" "dpkg -l | grep -qw xrdp" ;;
+      1)
+        run_step "${LANG_BATCH_MINIMAL_INSTALL}" "./install/install-xrdp.sh" \
+                 "dpkg -l | grep -qw xrdp"
+        ;;
       2)
         if check_marker batch; then
           log_warn "${LANG_BATCH_ALREADY_INSTALLED}"
         else
           run_step "${LANG_STEP_DEPS}"    "./install/install-deps.sh"
-          run_step "${LANG_STEP_DESKTOP}" "./install/install-desktop.sh" "dpkg -l | grep -E -q 'xfce4|gnome-session|plasma-desktop'"
-          run_step "${LANG_STEP_XRDP}"    "./install/install-xrdp-core.sh" "dpkg -l | grep -qw xrdp"
+          run_step "${LANG_STEP_DESKTOP}" "./install/install-desktop.sh" \
+                   "dpkg -l | grep -E -q 'xfce4|gnome-session|plasma-desktop'"
+          run_step "${LANG_STEP_XRDP}"    "./install/install-xrdp-core.sh" \
+                   "dpkg -l | grep -qw xrdp"
           write_marker batch success xfce4
           log_ok "${LANG_BATCH_DONE}"
+          
+          echo
+          read -r -p "${LANG_ADD_MENU_XRDP}? (y/n): " _ok
+          if [[ "$_ok" =~ ^[Yy]$ ]]; then
+            bash ./utils/add-xrdp-user.sh
+          fi
         fi
         ;;
       3) bash ./uninstall/uninstall-xrdp.sh ;;
@@ -92,9 +103,10 @@ menu_batch() {
       9) break ;;
       *) echo -e "${YELLOW}${LANG_INVALID_OPTION}${NC}" && sleep 1 ;;
     esac
-    read -r -p "${LANG_BACK_TO_MAIN_MENU}"
+    echo; read -r -p "${LANG_BACK_TO_MAIN_MENU}"
   done
 }
+
 
 # ────────────────────────────────────────────────────────────
 # Submenu: Install / Uninstall Tools + Extensions
