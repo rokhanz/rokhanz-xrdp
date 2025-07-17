@@ -1,58 +1,70 @@
-#!/bin/bash
-# Uninstall VSCode (app & all extension) - rokhanz v1.0.0 - MIT
+#!/usr/bin/env bash
+# uninstall/uninstall-vscode.sh — Uninstall VSCode (app & all extensions)
+# Author : rokhanz
+# Version: 1.0.1
+# License: MIT
 
-. ./set/set-language.sh
+set -euo pipefail
+IFS=$'\n\t'
 
-SAVEFILE="save-ext.txt"
-MARKER=".installed_vscode_ext"
-LOGFILE="./logs/error.log"
-[ -d ./logs ] || mkdir ./logs
+# Paths & file
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SAVEFILE="$SCRIPT_DIR/../save-ext.txt"
+MARKER="$SCRIPT_DIR/../.installed_vscode_ext"
+LOGDIR="$SCRIPT_DIR/../logs"
+LOGFILE="$LOGDIR/error.log"
+mkdir -p "$LOGDIR"
 
-log_error() { echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1" >> "$LOGFILE"; }
+# Load bahasa & helper
+source "$SCRIPT_DIR/../set/set-language.sh"
+source "$SCRIPT_DIR/../lib/common.sh"
 
-clear
-echo "========================================================"
-echo "❌ Uninstall VSCode & Semua Extension"
-echo "========================================================"
+# Title
+echo -e "${CYAN}========================================================${NC}"
+echo -e "❌ ${LANG_STEP_UN_VSCODE:-Uninstall VSCode & Extensions}"
+echo -e "========================================================${NC}"
 
+# Cek ada VSCode
 if ! command -v code >/dev/null 2>&1; then
-    echo "❌ VSCode tidak ditemukan di sistem."
-    log_error "VSCode app not found for uninstall."
-    echo -e "${LANG_BACK_MAIN}"
-    read -t 10 -p ""
-    exec bash ./main.sh
+    log_warn "${LANG_VSCODE_NOT_FOUND:-VSCode tidak ditemukan di sistem.}"
+    write_marker "vscode_ext" false 2>/dev/null || true
+    exit 0
 fi
 
-echo "⚠️  Ini akan menghapus SEMUA extension dan aplikasi VSCode dari server Anda!"
-read -p "Lanjutkan uninstall total? (y/n): " confirm
-[[ ! "$confirm" =~ ^[Yy]$ ]] && echo "Batal uninstall."; sleep 2; exec bash ./main.sh
+# Konfirmasi lanjut uninstall
+echo -e "${YELLOW}⚠️  ${LANG_UNVSCODE_CONFIRM:-Ini akan menghapus SEMUA extension dan aplikasi VSCode dari server Anda!}${NC}"
+read -r -p "${LANG_UNVSCODE_PROMPT:-Lanjutkan uninstall total? (y/n): }" confirm
+if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+    echo "❌ ${LANG_UNVSCODE_CANCELLED:-Batal uninstall.}"
+    sleep 2
+    exit 0
+fi
 
-# Step 1: Uninstall extension (save-ext.txt jika ada, jika tidak hapus semua)
-echo "🧹 Menghapus semua extension VSCode..."
+# Step 1: Uninstall extensions (pakai save-ext.txt jika ada)
+echo -e "${CYAN}${LANG_UNVSCODE_EXT_RM:-Menghapus semua extension VSCode...}${NC}"
 if [ -f "$SAVEFILE" ]; then
     while IFS= read -r ext; do
-        code --uninstall-extension "$ext" && echo "✅ Uninstall $ext" || { echo "⚠️ $ext gagal dihapus"; log_error "Failed uninstall $ext"; }
+        code --uninstall-extension "$ext" && log_ok "Uninstall $ext" || log_warn "$ext gagal dihapus"
     done < "$SAVEFILE"
     rm -f "$SAVEFILE"
 elif code --list-extensions | grep . &>/dev/null; then
-    # Hapus semua extension yang terinstall (jika save-ext.txt tidak ada)
     for ext in $(code --list-extensions); do
-        code --uninstall-extension "$ext" && echo "✅ Uninstall $ext" || { echo "⚠️ $ext gagal dihapus"; log_error "Failed uninstall $ext"; }
+        code --uninstall-extension "$ext" && log_ok "Uninstall $ext" || log_warn "$ext gagal dihapus"
     done
 else
-    echo "🔹 Tidak ada extension VSCode yang terinstall."
+    log_warn "${LANG_UNVSCODE_NO_EXT:-Tidak ada extension VSCode yang terinstall.}"
 fi
-rm -f "$MARKER"
+[ -f "$MARKER" ] && rm -f "$MARKER"
 
 # Step 2: Uninstall VSCode package
-echo "❌ Uninstall aplikasi VSCode (package, repo, config)..."
+echo -e "${CYAN}${LANG_UNVSCODE_APP_RM:-Uninstall aplikasi VSCode (package, repo, config)...}${NC}"
 sudo apt-get remove --purge -y code
 sudo rm -rf ~/.config/Code
 sudo rm -f /etc/apt/sources.list.d/vscode.list
 sudo rm -f /usr/share/keyrings/packages.microsoft.gpg
 
-echo "✅ VSCode dan semua extension berhasil dihapus."
+log_ok "${LANG_UNVSCODE_DONE:-VSCode dan semua extension berhasil dihapus.}"
 
-echo -e "${YELLOW}↩️  ${LANG_BACK_MAIN} (3 detik)${NC}"
-sleep 3
-exec bash ./main.sh
+# Selesai, kembali ke menu utama (pause sebentar)
+echo -e "${YELLOW}↩️  ${LANG_BACK_MAIN:-Tekan Enter atau tunggu 5 detik untuk kembali}${NC}"
+read -t 5 -p ""
