@@ -24,6 +24,25 @@ LANG_WARN_ALREADY_INSTALLED="⚠️ Bereits eingerichtet."
 LANG_BACK_TO_MAIN_MENU="↩️ Zurück zum Hauptmenü"
 LANG_BACK_MAIN="↩️ Zurück zum Hauptmenü in 10 Sekunden... (Drücke Enter für sofortige Rückkehr)"
 
+# Deutsch
+# Protokoll-Präfixe & Emojis
+LANG_OK_EMOJI="✅"
+LANG_WARN_EMOJI="⚠️"
+LANG_ERROR_EMOJI="❌"
+LANG_LOG_OK_PREFIX="[ERFOLG]"
+LANG_LOG_WARN_PREFIX="[WARNUNG]"
+LANG_LOG_ERROR_PREFIX="[FEHLER]"
+
+# Allgemeine Meldungen
+LANG_ALREADY_DONE="Bereits erledigt, überspringe."
+LANG_STEP_DONE="Fertig."
+LANG_PAUSE_PROMPT="Drücken Sie Enter, um fortzufahren…"
+
+# Menü
+LANG_MENU_STATUS="Installations- & Deinstallationsstatus"
+LANG_MENU_EXTENSION="Erweiterungen installieren & entfernen"
+LANG_BATCH_DONE="Batch abgeschlossen"
+
 # Neuen Benutzer hinzufügen
 LANG_ADD_XRDP_USER_TITLE="=== 👤 XRDP-Benutzer hinzufügen ==="
 LANG_ADD_XRDP_USER_PROMPT="Neuen Benutzernamen eingeben: "
