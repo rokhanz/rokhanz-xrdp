@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# set/set-conky.sh — Set/Config: conky, autostart, custom config, wallpaper branding
+# set/set-config.sh — Configurasi Conky, wallpaper & Autologin XRDP
 # Author : rokhanz
 # Version: 1.0.1
 # License: MIT
@@ -7,87 +7,103 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-source ./set/set-language.sh 2>/dev/null || true
+# ────────────────────────────────────────────────────────────
+# Load bahasa & fungsi umum
+source "$(dirname "${BASH_SOURCE[0]}")/set-language.sh"
+source "../lib/common.sh"
 
-CYAN='\033[0;36m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-RED='\033[0;31m'
-NC='\033[0m'
+# ANSI colors
+: "${CYAN:='\033[0;36m'}" : "${GREEN:='\033[0;32m'}"
+: "${YELLOW:='\033[0;33m'}": "${RED:='\033[0;31m'}" : "${NC:='\033[0m'}"
 
-log_ok()    { echo -e "${GREEN}${LANG_SUCCESS_EMOJI:-✅}  $1${NC}"; }
-log_warn()  { echo -e "${YELLOW}${LANG_WARN_EMOJI:-⚠️}  $1${NC}"; }
-log_error() { echo -e "${RED}${LANG_FAIL_EMOJI:-❌}  $1${NC}"; }
-
-echo -e "${CYAN}${LANG_INSTALL_STEP_CONFIG:-Konfigurasi Conky & Branding}${NC}"
-
-# --- Install Conky jika belum ada
+# ────────────────────────────────────────────────────────────
+# 1) Install Conky & config di /etc/skel
+echo -e "${CYAN}${LANG_STEP_CONFIG}${NC}"
 if ! dpkg -l | grep -qw conky; then
-  if sudo apt-get install -y conky; then
-    log_ok "Conky ${LANG_STEP_DONE:-Selesai install}"
-  else
-    log_warn "Conky ${LANG_ERROR_FAILED:-Gagal install}"
-  fi
+  sudo apt-get install -y conky
 fi
 
-# --- Buat config conky & autostart di /etc/skel (untuk user baru)
-mkdir -p /etc/skel/.config/conky
-cat > /etc/skel/.config/conky/conky.conf <<'EOL'
-conky.config = {
-    alignment = 'top_right',
-    gap_x = 20,
-    gap_y = 40,
-    minimum_width = 300,
-    maximum_width = 300,
-    minimum_height = 200,
-    own_window = true,
-    own_window_type = 'desktop',
-    own_window_transparent = true,
-    own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
-    double_buffer = true,
-    draw_shades = false,
-    draw_outline = false,
-    draw_borders = false,
-    use_xft = true,
-    xftalpha = 0.8,
-    update_interval = 5
-}
+# buat folder skeleton
+sudo mkdir -p /etc/skel/.config/conky /etc/skel/.config/autostart
 
+# tulis conky.conf
+sudo tee /etc/skel/.config/conky/conky.conf >/dev/null <<'EOL'
+conky.config = {
+  alignment = 'top_right', gap_x = 20, gap_y = 40,
+  minimum_width = 300, own_window = true,
+  own_window_type = 'desktop',
+  own_window_transparent = true,
+  update_interval = 5
+}
 conky.text = [[
-${color white}${font Ubuntu:style=Bold:size=12}VPS SPECIFICATIONS${font}${color}
-${color grey}=================================${color}
-${color white}Hostname: ${color grey}$nodename
-${color white}IP: ${color grey}$addr
-${color white}CPU: ${color grey}$cpu ${color white}@ ${color grey}$freq_g GHz
-${color white}RAM: ${color grey}$mem/$memmax ($memperc%)
-${color white}Storage: ${color grey}$fs_used/$fs_size ($fs_used_perc)
-${color white}Uptime: ${color grey}$uptime
-${color grey}=================================${color}
-${color white}XRDP Status: ${color grey}${exec systemctl is-active xrdp}
-${color white}Desktop: ${color grey}${exec cat /etc/xrdp/startwm.sh | grep '^exec' | cut -d' ' -f2}
+${color white}${font Ubuntu:size=12}VPS INFO${font}${color}
+Hostname: $nodename
+IP:       $addr
+CPU:      $cpu @ $freq_g GHz
+RAM:      $mem/$memmax ($memperc%)
+Disk:     $fs_used/$fs_size ($fs_used_perc)
+Uptime:   $uptime
+XRDP:     ${exec systemctl is-active xrdp}
+Desktop:  ${exec grep '^exec ' /etc/xrdp/startwm.sh | cut -d' ' -f2}
 ]]
 EOL
 
-mkdir -p /etc/skel/.config/autostart
-cat > /etc/skel/.config/autostart/conky.desktop <<EOL
+# tulis autostart
+sudo tee /etc/skel/.config/autostart/conky.desktop >/dev/null <<'EOL'
 [Desktop Entry]
 Type=Application
 Name=Conky
 Exec=conky -c ~/.config/conky/conky.conf
-StartupNotify=false
 Terminal=false
 EOL
 
-# --- Download wallpaper (branding)
+log_ok "$LANG_STEP_DONE"
+
+# ────────────────────────────────────────────────────────────
+# 2) Download wallpaper branding
 wallpaper_url="https://raw.githubusercontent.com/rokhanz/myimg/main/assets/image/chips_rokhanz.png"
 wallpaper_dest="/usr/share/backgrounds/chips_rokhanz.png"
 if [ ! -f "$wallpaper_dest" ]; then
-  if wget -qO "$wallpaper_dest" "$wallpaper_url"; then
-    log_ok "Wallpaper branding ${LANG_STEP_DONE:-Selesai download}"
-  else
-    log_warn "Wallpaper ${LANG_ERROR_FAILED:-Gagal download}"
-  fi
+  sudo wget -qO "$wallpaper_dest" "$wallpaper_url" \
+    && log_ok "Wallpaper branding $LANG_STEP_DONE" \
+    || log_warn "Wallpaper $LANG_ERROR_FAILED"
 fi
 
-# --- Sukses
-log_ok "${LANG_STEP_DONE:-Selesai}"
+# ────────────────────────────────────────────────────────────
+# 3) Autologin XRDP
+# pastikan variabel XRDP_NEW_USER & XRDP_NEW_PASS sudah diekspor sebelumnya
+if [[ -n "${XRDP_NEW_USER:-}" && -n "${XRDP_NEW_PASS:-}" ]]; then
+  echo -e "${CYAN}🔐 Mengonfigurasi autologin XRDP untuk user ${XRDP_NEW_USER}${NC}"
+
+  # sesman.ini
+  sudo sed -i \
+    -e "s|^;*AutoLoginUser=.*|AutoLoginUser=${XRDP_NEW_USER}|" \
+    -e "s|^;*AutoLoginPass=.*|AutoLoginPass=${XRDP_NEW_PASS}|" \
+    /etc/xrdp/sesman.ini
+
+  # pilih session sesuai DE yang terpasang
+  if command -v xfce4-session &>/dev/null; then
+    SESSION="xfce4-session"
+  elif command -v gnome-session &>/dev/null; then
+    SESSION="gnome-session"
+  elif command -v startplasma-x11 &>/dev/null; then
+    SESSION="startplasma-x11"
+  else
+    SESSION="xfce4-session"
+  fi
+
+  # startwm.sh
+  sudo sed -i -E \
+    "s|^exec .*|exec dbus-launch --exit-with-session ${SESSION}|" \
+    /etc/xrdp/startwm.sh
+
+  log_ok "Autologin XRDP: user=${XRDP_NEW_USER}, session=${SESSION}"
+else
+  log_warn "Variabel XRDP_NEW_USER/XRDP_NEW_PASS belum diset, lewati autologin"
+fi
+
+# ────────────────────────────────────────────────────────────
+# Selesai
+echo -e "${GREEN}✅  ${LANG_STEP_DONE}${NC}"
+echo -e "${YELLOW}${LANG_BACK_TO_MAIN_MENU}${NC}"
+read -r -p ""
