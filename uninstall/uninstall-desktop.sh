@@ -1,47 +1,61 @@
-#!/bin/bash
-# Uninstall Desktop Environment (XFCE, GNOME, KDE, dll)
-# Author: rokhanz
-# Version: 1.0.0
+#!/usr/bin/env bash
+# uninstall/uninstall-desktop.sh — Uninstall Desktop Environment (XFCE, GNOME, KDE, dll)
+# Author : rokhanz
+# Version: 1.0.1
 # License: MIT
 
-. ./set/set-language.sh
+set -euo pipefail
+IFS=$'\n\t'
 
-CYAN='\033[0;36m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; RED='\033[0;31m'; NC='\033[0m'
-LOG_ERROR="./logs/error.log"
-[ -d logs ] || mkdir logs
-MARKER="./.installed_desktop"
+# ────────────────────────────────────────────────────────────
+# Paths
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-log_ok()    { echo -e "${GREEN}${LANG_SUCCESS_EMOJI:-✅}  $1${NC}"; }
-log_warn()  { echo -e "${YELLOW}${LANG_WARN_EMOJI:-⚠️}  $1${NC}"; }
-log_error() { echo -e "${RED}${LANG_FAIL_EMOJI:-❌}  $1${NC}"; echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1" >> "$LOG_ERROR"; }
+# ────────────────────────────────────────────────────────────
+# Load bahasa & helper umum (run_step, log_ok, log_warn, log_error, check_marker, write_marker)
+source "$SCRIPT_DIR/../set/set-language.sh"
+source "$SCRIPT_DIR/../lib/common.sh"
 
-clear
-echo -e "${CYAN}🧹 ${LANG_STEP_UN_DESKTOP:-Uninstall Desktop Env}${NC}"
+# ────────────────────────────────────────────────────────────
+# Title
+echo -e "${CYAN}${LANG_STEP_UN_DESKTOP:-Uninstall Desktop Environment}${NC}"
 
-# List paket desktop yang umum (extend as needed)
-PKG="xfce4 xfce4-goodies gnome-session gdm3 ubuntu-desktop plasma-desktop kde-standard dbus-x11 xauth"
+# ────────────────────────────────────────────────────────────
+# Marker key
+MARKER="desktop"
 
-any_installed=0
-for pkg in $PKG; do
+# ────────────────────────────────────────────────────────────
+# Check if any DE package is installed
+DE_PACKAGES=(xfce4 xfce4-goodies gnome-session gdm3 ubuntu-desktop plasma-desktop kde-standard)
+any_installed=false
+for pkg in "${DE_PACKAGES[@]}"; do
   if dpkg -l | grep -qw "$pkg"; then
-    any_installed=1
+    any_installed=true
     break
   fi
 done
 
-if [ $any_installed -eq 0 ]; then
-  log_warn "Desktop Environment ${LANG_ALREADY_UNINSTALLED:-sudah dihapus!}"
-  [ -f "$MARKER" ] && rm -f "$MARKER"
-  echo -e "${CYAN}↩️  ${LANG_BACK_TO_TOOLS:-Kembali ke menu tools} (5 detik)${NC}"
-  read -t 5 -p ""
+if ! $any_installed; then
+  log_warn "${LANG_ALREADY_UNINSTALLED:-Desktop Environment sudah dihapus}"
+  # Remove marker if exists
+  write_marker "$MARKER" false 2>/dev/null || true
   exit 0
 fi
 
-sudo apt-get remove --purge -y $PKG
-sudo apt-get autoremove -y
-[ -f "$MARKER" ] && rm -f "$MARKER"
+# ────────────────────────────────────────────────────────────
+# Purge DE packages
+run_step "${LANG_STEP_UN_DESKTOP:-Remove Desktop Environment}" "\
+sudo apt-get purge -y ${DE_PACKAGES[*]}" \
+"dpkg -l | grep -qw xfce4 || dpkg -l | grep -qw gnome-session || dpkg -l | grep -qw plasma-desktop"
 
-log_ok "Desktop Environment ${LANG_STEP_DONE:-Selesai uninstall}"
+# ────────────────────────────────────────────────────────────
+# Autoremove unused dependencies
+run_step "${LANG_STEP_AUTO_REMOVE:-Autoremove unused packages}" "sudo apt-get autoremove -y"
 
-echo -e "${CYAN}↩️  ${LANG_BACK_TO_TOOLS:-Kembali ke menu tools} (5 detik)${NC}"
-read -t 5 -p ""
+# ────────────────────────────────────────────────────────────
+# Cleanup marker
+write_marker "$MARKER" false
+
+# ────────────────────────────────────────────────────────────
+# Done
+log_ok "${LANG_STEP_DONE:-✅  Desktop Environment berhasil di-uninstall}"
