@@ -1,40 +1,53 @@
-#!/bin/bash
-# Uninstall VLC (modular, logging, marker)
-# Author: rokhanz
-# Version: 1.0.0
+#!/usr/bin/env bash
+# uninstall/uninstall-vlc.sh — Uninstall VLC media player (modular, logging, marker)
+# Author : rokhanz
+# Version: 1.0.1
 # License: MIT
 
-. ./set/set-language.sh
+set -euo pipefail
+IFS=$'\n\t'
 
-CYAN='\033[0;36m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; RED='\033[0;31m'; NC='\033[0m'
-LOG_ERROR="./logs/error.log"
-[ -d logs ] || mkdir logs
-MARKER="./.installed_vlc"
+# ────────────────────────────────────────────────────────────
+# Paths
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LOG_DIR="$SCRIPT_DIR/../logs"
+LOG_FILE="$LOG_DIR/error.log"
+MARKER="vlc"
 
-log_ok()    { echo -e "${GREEN}${LANG_SUCCESS_EMOJI:-✅}  $1${NC}"; }
-log_warn()  { echo -e "${YELLOW}${LANG_WARN_EMOJI:-⚠️}  $1${NC}"; }
-log_error() { echo -e "${RED}${LANG_FAIL_EMOJI:-❌}  $1${NC}"; echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1" >> "$LOG_ERROR"; }
+mkdir -p "$LOG_DIR"
 
-clear
-echo -e "${CYAN}🧹 ${LANG_STEP_UN_VLC:-Uninstall VLC}${NC}"
+# ────────────────────────────────────────────────────────────
+# Load bahasa & common helpers
+source "$SCRIPT_DIR/../set/set-language.sh"
+source "$SCRIPT_DIR/../lib/common.sh"
 
+# ────────────────────────────────────────────────────────────
+# Title
+echo -e "${CYAN}${LANG_STEP_UN_VLC:-Uninstall VLC}${NC}"
+
+# ────────────────────────────────────────────────────────────
+# Skip jika VLC tidak terpasang
 if ! dpkg -l | grep -qw vlc; then
-  log_warn "VLC ${LANG_ALREADY_UNINSTALLED:-sudah dihapus!}"
-  [ -f "$MARKER" ] && rm -f "$MARKER"
-  echo -e "${CYAN}↩️  ${LANG_BACK_TO_TOOLS:-Kembali ke menu tools} (5 detik)${NC}"
-  read -t 5 -p ""
+  log_warn "${LANG_ALREADY_UNINSTALLED:-VLC sudah dihapus}"
+  write_marker "$MARKER" false 2>/dev/null || true
   exit 0
 fi
 
-sudo apt-get remove --purge -y vlc
-sudo apt-get autoremove -y
-[ -f "$MARKER" ] && rm -f "$MARKER"
+# ────────────────────────────────────────────────────────────
+# Uninstall VLC
+run_step "${LANG_STEP_UN_VLC:-Uninstall VLC}" \
+         "sudo apt-get remove --purge -y vlc" \
+         "dpkg -l | grep -qw vlc"
 
-if ! dpkg -l | grep -qw vlc; then
-  log_ok "VLC ${LANG_STEP_DONE:-Selesai uninstall}"
-else
-  log_error "VLC gagal dihapus!"
-fi
+# ────────────────────────────────────────────────────────────
+# Autoremove leftover packages
+run_step "${LANG_STEP_AUTO_REMOVE:-Autoremove unused packages}" \
+         "sudo apt-get autoremove -y"
 
-echo -e "${CYAN}↩️  ${LANG_BACK_TO_TOOLS:-Kembali ke menu tools} (5 detik)${NC}"
-read -t 5 -p ""
+# ────────────────────────────────────────────────────────────
+# Hapus marker
+write_marker "$MARKER" false
+
+# ────────────────────────────────────────────────────────────
+# Selesai
+log_ok "${LANG_STEP_DONE:-✅  VLC berhasil di-uninstall}"
