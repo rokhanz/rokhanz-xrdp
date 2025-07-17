@@ -132,7 +132,7 @@ menu_tools() {
 }
 
 # ────────────────────────────────────────────────────────────
-# Submenu: Extensions (VSCode wizard) – inline
+# Submenu: Extensions (VSCode wizard) – FIXED version
 menu_extension() {
   show_banner
   local EXTFILE="vscode-ext.txt" SAVEFILE="save-ext.txt" MARKER=".installed_vscode_ext"
@@ -141,13 +141,15 @@ menu_extension() {
 
   declare -A EXT_CAT EXT_MAP
   local CAT_LIST=()
-
+  local current_cat=""
   while IFS= read -r line; do
     if [[ "$line" =~ ^#CATEGORY:(.*) ]]; then
-      CAT_LIST+=("${BASH_REMATCH[1]}")
-    elif [[ "$line" =~ ^([a-zA-Z0-9.-]+)\ \(publisher:\ ([^)]+)\) ]]; then
-      ext="${BASH_REMATCH[1]}" pub="${BASH_REMATCH[2]}"
-      EXT_CAT["${CAT_LIST[-1]}"]+="$ext|$pub,"
+      current_cat="${BASH_REMATCH[1]}"
+      CAT_LIST+=("$current_cat")
+    elif [[ "$line" =~ ^([a-zA-Z0-9._-]+)[[:space:]]+\(publisher:[[:space:]]*([^)]+)\)$ ]]; then
+      ext="${BASH_REMATCH[1]}"
+      pub="${BASH_REMATCH[2]}"
+      EXT_CAT["$current_cat"]+="$ext|$pub,"
       EXT_MAP["$ext"]="$pub"
     fi
   done < "$EXTFILE"
