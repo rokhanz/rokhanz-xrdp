@@ -23,6 +23,24 @@ LANG_GOODBYE=" See you later!"
 LANG_WARN_ALREADY_INSTALLED="⚠️ Already set up."
 LANG_BACK_TO_MAIN_MENU="↩️ Return to main menu"
 LANG_BACK_MAIN="↩️ Returning to main menu in 10 seconds... (press Enter to return immediately)"
+# English (Canada)
+# Logging prefixes & emoji
+LANG_OK_EMOJI="✅"
+LANG_WARN_EMOJI="⚠️"
+LANG_ERROR_EMOJI="❌"
+LANG_LOG_OK_PREFIX="[SUCCESS]"
+LANG_LOG_WARN_PREFIX="[WARNING]"
+LANG_LOG_ERROR_PREFIX="[ERROR]"
+
+# Common messages
+LANG_ALREADY_DONE="Already done, skipping."
+LANG_STEP_DONE="Done."
+LANG_PAUSE_PROMPT="Press Enter to continue…"
+
+# Menu
+LANG_MENU_STATUS="Install & uninstall status"
+LANG_MENU_EXTENSION="install & remove extensions"
+LANG_BATCH_DONE="Batch complete"
 
 # Add new user
 LANG_ADD_XRDP_USER_TITLE="=== 👤 Add XRDP User ==="
