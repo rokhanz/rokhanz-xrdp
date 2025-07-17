@@ -24,6 +24,25 @@ LANG_WARN_ALREADY_INSTALLED="⚠️ Naka-set na dati."
 LANG_BACK_TO_MAIN_MENU="↩️ Bumalik sa pangunahing menu"
 LANG_BACK_MAIN="↩️ Babalik sa pangunahing menu sa loob ng 10 segundo... (pindutin ang Enter para agad bumalik)"
 
+# Filipino
+# Mga prefix ng log & emoji
+LANG_OK_EMOJI="✅"
+LANG_WARN_EMOJI="⚠️"
+LANG_ERROR_EMOJI="❌"
+LANG_LOG_OK_PREFIX="[TAGUMPAY]"
+LANG_LOG_WARN_PREFIX="[BABALA]"
+LANG_LOG_ERROR_PREFIX="[ERROR]"
+
+# Mga pangkalahatang mensahe
+LANG_ALREADY_DONE="Tapos na, lilipas."
+LANG_STEP_DONE="Tapos na."
+LANG_PAUSE_PROMPT="Pindutin ang Enter upang magpatuloy…"
+
+# Menu
+LANG_MENU_STATUS="Katayuan ng install & uninstall"
+LANG_MENU_EXTENSION="install & alisin ang mga extension"
+LANG_BATCH_DONE="Batch tapos na"
+
 # Magdagdag ng bagong user
 LANG_ADD_XRDP_USER_TITLE="=== 👤 Magdagdag ng XRDP User ==="
 LANG_ADD_XRDP_USER_PROMPT="Ilagay ang bagong username: "
