@@ -132,8 +132,8 @@ menu_tools() {
 }
 
 # ────────────────────────────────────────────────────────────
-# Submenu: Extensions (VSCode wizard) – FIXED version
-menu_extension() {
+# === VSCode Extensions Wizard tanpa regex grup ===
+menu_extension(){
   show_banner
   local EXTFILE="vscode-ext.txt" SAVEFILE="save-ext.txt" MARKER=".installed_vscode_ext"
   local LOGFILE="$LOG_DIR/error.log"
@@ -141,22 +141,28 @@ menu_extension() {
 
   declare -A EXT_CAT EXT_MAP
   local CAT_LIST=()
-  local current_cat=""
-  
+
   while IFS= read -r line; do
-    if [[ "$line" =~ ^#CATEGORY:(.*) ]]; then
-      CAT_LIST+=("${BASH_REMATCH[1]}")
-    elif [[ "$line" =~ ^([a-zA-Z0-9._-]+)[[:space:]]+\(publisher:[[:space:]]*([^)]+)\)$ ]]; then
-      ext="${BASH_REMATCH[1]}"
-      pub="${BASH_REMATCH[2]}"
-      last_cat_idx=$(( ${#CAT_LIST[@]} - 1 ))
-      if [[ $last_cat_idx -ge 0 ]]; then
-        EXT_CAT["${CAT_LIST[$last_cat_idx]}"]+="$ext|$pub,"
-        EXT_MAP["$ext"]="$pub"
-      fi
+    # kategori
+    if [[ $line == \#CATEGORY:* ]]; then
+      CAT_LIST+=("${line#\#CATEGORY:}")
+      continue
+    fi
+    # extension line
+    if [[ $line == *"(publisher:"*")" ]]; then
+      # ext = sebelum spasi pertama
+      ext="${line%% *}"
+      # pub = antara "publisher: " dan ")"
+      pub="${line#*(publisher: }"
+      pub="${pub%) }"
+      pub="${pub%)}"
+      # simpan
+      idx=$(( ${#CAT_LIST[@]} - 1 ))
+      EXT_CAT["${CAT_LIST[$idx]}"]+="$ext|$pub,"
+      EXT_MAP["$ext"]="$pub"
     fi
   done < "$EXTFILE"
-  
+
   local PICKED=()
   log_error(){ echo "$(date '+%F %T') [ERROR] $1" >> "$LOGFILE"; }
 
@@ -169,12 +175,11 @@ menu_extension() {
     echo "99. ${LANG_EXT_SAVE}"
     echo "0. ${LANG_EXT_BACK}"
     read -r -p "${LANG_MENU_PROMPT}" choice
-    [[ "$choice" == "0" ]] && return
-    [[ "$choice" == "99" ]] && break
+    [[ $choice == 0 ]] && return
+    [[ $choice == 99 ]] && break
 
-    cat="${CAT_LIST[$((choice-1))]}"
+    local cat="${CAT_LIST[$((choice-1))]}"
     IFS=',' read -ra items <<< "${EXT_CAT[$cat]}"
-    echo "--------------------------------------------------------"
     for j in "${!items[@]}"; do
       [[ -z "${items[$j]}" ]] && continue
       IFS='|' read -r nm pb <<< "${items[$j]}"
@@ -183,9 +188,9 @@ menu_extension() {
     echo "0. ${LANG_EXT_BACK}"
     read -r -p "${LANG_EXT_CHOOSE_EXT_PROMPT}" picks
     for p in $picks; do
-      [[ "$p" == "0" ]] && break
+      [[ $p == 0 ]] && break
       ext="${items[$((p-1))]%%|*}"
-      [[ -n "$ext" && ! " ${PICKED[*]} " =~ " $ext " ]] && PICKED+=("$ext")
+      [[ -n $ext && ! " ${PICKED[*]} " =~ " $ext " ]] && PICKED+=("$ext")
     done
   done
 
@@ -195,8 +200,10 @@ menu_extension() {
     echo "- $ext (${EXT_MAP[$ext]})"
   done
   read -r -p "${LANG_EXT_SAVE}? (y/n): " ok
-  if [[ "$ok" =~ ^[Yy]$ ]]; then
-    printf "%s\n" "${PICKED[@]}" > "$SAVEFILE" && touch "$MARKER" && echo "✅ ${LANG_EXT_DONE}"
+  if [[ $ok =~ ^[Yy]$ ]]; then
+    printf "%s\n" "${PICKED[@]}" > "$SAVEFILE"
+    touch "$MARKER"
+    echo "✅ ${LANG_EXT_DONE}"
   else
     echo "${LANG_EXT_ERR_EMPTY}"
   fi
