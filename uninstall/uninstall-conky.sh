@@ -1,41 +1,53 @@
-#!/bin/bash
-# Uninstall Conky (VPS Info) + Config & Autostart
-# Author: rokhanz
-# Version: 1.0.0
+#!/usr/bin/env bash
+# uninstall/uninstall-conky.sh — Uninstall Conky (VPS Info) + Config & Autostart
+# Author : rokhanz
+# Version: 1.0.1
 # License: MIT
 
-. ./set/set-language.sh
+set -euo pipefail
+IFS=$'\n\t'
 
-CYAN='\033[0;36m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; RED='\033[0;31m'; NC='\033[0m'
-LOG_ERROR="./logs/error.log"
-[ -d logs ] || mkdir logs
-MARKER="./.installed_conky"
+# ────────────────────────────────────────────────────────────
+# Direktori skrip ini
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-log_ok()    { echo -e "${GREEN}${LANG_SUCCESS_EMOJI:-✅}  $1${NC}"; }
-log_warn()  { echo -e "${YELLOW}${LANG_WARN_EMOJI:-⚠️}  $1${NC}"; }
-log_error() { echo -e "${RED}${LANG_FAIL_EMOJI:-❌}  $1${NC}"; echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1" >> "$LOG_ERROR"; }
+# ────────────────────────────────────────────────────────────
+# Muat bahasa & helper umum (run_step, log_ok, log_warn, log_error, check_marker, write_marker)
+source "$SCRIPT_DIR/../set/set-language.sh"
+source "$SCRIPT_DIR/../lib/common.sh"
 
-clear
-echo -e "${CYAN}🧹 ${LANG_STEP_UN_CONKY:-Uninstall Conky/Config}${NC}"
+# ────────────────────────────────────────────────────────────
+# Tampilkan judul
+echo -e "${CYAN}${LANG_STEP_UN_CONKY:-Uninstall Conky & Config}${NC}"
 
-if ! dpkg -l | grep -qw conky; then
-  log_warn "Conky ${LANG_ALREADY_UNINSTALLED:-sudah dihapus!}"
-else
-  sudo apt-get remove --purge -y conky conky-std
-  sudo apt-get autoremove -y
-fi
+# ────────────────────────────────────────────────────────────
+# Marker untuk Conky
+MARKER="conky"
 
-sudo rm -rf /etc/skel/.config/conky /etc/skel/.config/autostart/conky.desktop
+# 1) Uninstall paket Conky jika terpasang
+run_step "${LANG_STEP_UN_CONKY:-Remove Conky packages}" \
+         "sudo apt-get remove --purge -y conky conky-all conky-std" \
+         "dpkg -l | grep -qw conky" || log_warn "${LANG_ALREADY_UNINSTALLED}"
 
-# Hapus dari seluruh user home (idempotent)
-for user_home in /home/*; do
-  sudo rm -f "$user_home/.config/autostart/conky.desktop"
-  sudo rm -rf "$user_home/.config/conky"
+# 2) Autoremove dependensi yang tidak terpakai
+run_step "${LANG_STEP_AUTO_REMOVE:-Autoremove unused packages}" \
+         "sudo apt-get autoremove -y"
+
+# ────────────────────────────────────────────────────────────
+# 3) Hapus konfigurasi dan autostart di skeleton dan home users
+echo -e "${CYAN}${LANG_STEP_CLEAN_CONFIG:-Cleaning config & autostart files}${NC}"
+sudo rm -rf /etc/skel/.config/conky \
+            /etc/skel/.config/autostart/conky.desktop || true
+
+for home in /home/*; do
+  sudo rm -rf "$home/.config/conky" \
+               "$home/.config/autostart/conky.desktop" || true
 done
 
-[ -f "$MARKER" ] && rm -f "$MARKER"
+# ────────────────────────────────────────────────────────────
+# 4) Hapus marker
+write_marker "$MARKER" false 2>/dev/null || true
 
-log_ok "Conky/Config ${LANG_STEP_DONE:-Selesai uninstall}"
-
-echo -e "${CYAN}↩️  ${LANG_BACK_TO_TOOLS:-Kembali ke menu tools} (5 detik)${NC}"
-read -t 5 -p ""
+# ────────────────────────────────────────────────────────────
+# Selesai
+log_ok "${LANG_STEP_DONE:-✅  Uninstall Conky & Config selesai}"
