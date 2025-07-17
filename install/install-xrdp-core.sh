@@ -1,37 +1,41 @@
-#!/bin/bash
-# Install XRDP Core
+#!/usr/bin/env bash
+# install/install-xrdp-core.sh — Install XRDP Core
 # Author : rokhanz
-# Version: 1.0.0
+# Version: 1.0.1
 # License: MIT
 
-. ./set/set-language.sh
+set -euo pipefail
+IFS=$'\n\t'
 
-CYAN='\033[0;36m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; RED='\033[0;31m'; NC='\033[0m'
+# ────────────────────────────────────────────────────────────
+# Direktori skrip ini
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-log_error() { echo -e "${RED}${LANG_FAIL_EMOJI:-❌}  $1${NC}"; }
-log_warn()  { echo -e "${YELLOW}${LANG_WARN_EMOJI:-⚠️}  $1${NC}"; }
-log_ok()    { echo -e "${GREEN}${LANG_SUCCESS_EMOJI:-✅}  $1${NC}"; }
+# ────────────────────────────────────────────────────────────
+# Load bahasa & helper umum (run_step, log_ok, log_warn, log_error, check_marker, write_marker)
+source "$SCRIPT_DIR/../set/set-language.sh"
+source "$SCRIPT_DIR/../lib/common.sh"
 
-echo -e "${CYAN}$LANG_INSTALL_STEP_XRDP${NC}"
+# ────────────────────────────────────────────────────────────
+# Tampilkan langkah instalasi
+echo -e "${CYAN}${LANG_INSTALL_STEP_XRDP}${NC}"
 
-# --- Validasi sudah terinstall
-if dpkg -l | grep -qw xrdp; then
-  log_warn "XRDP $LANG_INSTALL_SKIP"
+# ────────────────────────────────────────────────────────────
+# Tandai dengan marker "xrdp" agar tidak diulang
+MARKER="xrdp"
+
+if check_marker "$MARKER"; then
+  log_warn "${LANG_ALREADY_INSTALLED:-✔️  XRDP sudah terpasang}"
   exit 0
 fi
 
-if sudo apt-get install -y xrdp xorgxrdp; then
-  log_ok "XRDP $LANG_STEP_DONE"
-else
-  log_error "XRDP $LANG_INSTALL_ERROR"
-  sudo apt-get -f install -y || true
-  sudo dpkg --configure -a || true
-  sleep 1
-  if sudo apt-get install -y xrdp xorgxrdp; then
-    log_ok "XRDP $LANG_STEP_DONE"
-    exit 0
-  else
-    log_error "XRDP $LANG_INSTALL_ERROR"
-    exit 1
-  fi
-fi
+# ────────────────────────────────────────────────────────────
+# Jalankan instalasi XRDP & XorgXrdp
+run_step "${LANG_STEP_XRDP:-Install XRDP Core}" \
+         "sudo apt-get install -y xrdp xorgxrdp" \
+         "dpkg -l | grep -qw xrdp"
+
+# ────────────────────────────────────────────────────────────
+# Tulis marker dan konfirmasi sukses
+write_marker "$MARKER"
+log_ok "${LANG_STEP_DONE:-✅  XRDP Core selesai dipasang}"
