@@ -222,6 +222,7 @@ menu_set() {
     echo "3. ${LANG_SET_PORT}"
     echo "4. ${LANG_SET_TIMEZONE}"
     echo "5. ${LANG_SET_VPS_INFO}"
+    echo "6. ${LANG_ADD_MENU_XRDP}"
     echo "9. ${LANG_BACK_TO_MAIN_MENU}"
     read -r -p "${LANG_MENU_PROMPT}" opt
     case "$opt" in
@@ -230,6 +231,7 @@ menu_set() {
       3) bash ./set/set-port.sh             ;;
       4) bash ./set/set-timezone.sh         ;;
       5) bash ./set/set-conky.sh            ;;
+      6) bash ./utils/add-user-xrdp.sh      ;;
       9) break                              ;;
       *) echo -e "${YELLOW}${LANG_INVALID_OPTION}${NC}" && sleep 1 ;;
     esac
